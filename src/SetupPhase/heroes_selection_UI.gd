@@ -79,7 +79,7 @@ func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: 
 		if selected_hero_button.hero.id == new_selected_button.hero.id:
 			deselect_hero()
 			return
-		# test
+
 		if selected_hero_button:
 			deselect_hero()
 			selected_hero_button = new_selected_button
