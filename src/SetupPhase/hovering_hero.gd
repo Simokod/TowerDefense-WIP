@@ -1,0 +1,43 @@
+extends Control
+
+class_name HoveringHero
+
+@onready var tilemap: TileMap = get_node("../../../LevelTileMap")
+@onready var HeroPlacementManagerResource = preload("res://src/SetupPhase/hero_placement_manager.gd")
+
+var hero: Hero = null
+var hero_sprite: TextureRect = null
+var tile_center_delta: Vector2 = Vector2()
+var hero_placement_manager: HeroPlacementManager = null
+
+func _ready():
+	hero_placement_manager = HeroPlacementManagerResource.new()
+
+func setup(seleced_hero: Hero) -> void:
+	hero = seleced_hero
+	var texture_rect = TextureRect.new()
+	texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	texture_rect.custom_minimum_size = tilemap.tile_set.tile_size * 0.9
+	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hero_sprite = texture_rect
+	add_child(texture_rect)
+	
+	hero_sprite.texture = hero.sprite
+	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
+
+func _process(_delta: float) -> void:
+	var mouse_position: Vector2 = get_global_mouse_position()
+	var tile_position: Vector2i = tilemap.local_to_map(mouse_position)
+
+	var tile_center_position = (
+		tilemap.map_to_local(tile_position) -
+		tile_center_delta
+	)
+
+	global_position = tile_center_position
+	
+	if HeroPlacementManager.is_valid_hero_placement_position(hero, tile_position):
+		hero_sprite.modulate = Color(0.7, 1, 0.7, 1) # Light green color
+	else:
+		hero_sprite.modulate = Color(1, 0.5, 0.5, 0.8) # Light red-transparent color
