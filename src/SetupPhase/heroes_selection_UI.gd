@@ -6,7 +6,8 @@ const HeroPortraitResource = preload("res://HeroPortrait.tscn")
 const HoveringHeroResource = preload("res://src/SetupPhase/hovering_hero.gd")
 
 @onready var hero_buttons_container: VBoxContainer = $HeroSelectionContainer
-@onready var tilemap = get_node("/root/DemoLevel/LevelTileMap")
+@onready var tilemap = GameManager.get_tilemap()
+@onready var canvas_layer = get_parent()
 
 var selected_hero_button: HeroPortrait = null
 var hovering_hero: HoveringHero = null
@@ -21,7 +22,7 @@ func _ready():
 func create_hero_button(hero):
 	var hero_selection_button: HeroPortrait = HeroPortraitResource.instantiate()
 	const is_selection_button = true
-	hero_selection_button.setup(hero, tilemap, self, is_selection_button)
+	hero_selection_button.setup(hero, self, is_selection_button)
 	
 	hero_buttons_container.add_child(hero_selection_button)
 
@@ -65,11 +66,11 @@ func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: 
 	if not is_instance_valid(selected_hero_button):
 		if not is_selection_button:
 			selected_hero_button = new_selected_button.duplicate()
-			selected_hero_button.setup(new_selected_button.hero, tilemap, self, is_selection_button)
+			selected_hero_button.setup(new_selected_button.hero, self, is_selection_button)
 		else:
 			selected_hero_button = new_selected_button
 
-		HeroPlacementManager.remove_hero(new_selected_button.hero)
+		GameManager.hero_placement_manager.remove_hero(new_selected_button.hero)
 		selected_hero_button.select()
 		start_hovering(selected_hero_button.hero)
 		return
@@ -91,12 +92,12 @@ func _handle_right_press(new_selected_button: HeroPortrait, is_selection_button:
 		# Right click on selction button - deselect hero
 		if is_selection_button:
 			deselect_hero()
-			HeroPlacementManager.remove_hero(new_selected_button.hero)
+			GameManager.hero_placement_manager.remove_hero(new_selected_button.hero)
 		else: # Right click on placed hero - if hero is selected, deselect hero, otherwise remove hero from tile
 			if selected_hero_button:
 				deselect_hero()
 			else:
-				HeroPlacementManager.remove_hero(new_selected_button.hero)
+				GameManager.hero_placement_manager.remove_hero(new_selected_button.hero)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.is_pressed():
@@ -108,6 +109,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			var successfully_placed_hero = HeroPlacementManager.place_hero(selected_hero_button.hero)
+			var tile_position = tilemap.local_to_map(get_global_mouse_position())
+			var successfully_placed_hero = GameManager.hero_placement_manager.place_hero(selected_hero_button.hero, tile_position)
 			if successfully_placed_hero:
 				deselect_hero()

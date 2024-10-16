@@ -2,16 +2,11 @@ extends Control
 
 class_name HoveringHero
 
-@onready var tilemap: TileMap = get_node("../../../LevelTileMap")
-@onready var HeroPlacementManagerResource = preload("res://src/SetupPhase/hero_placement_manager.gd")
+@onready var tilemap = GameManager.get_tilemap()
 
 var hero: Hero = null
 var hero_sprite: TextureRect = null
 var tile_center_delta: Vector2 = Vector2()
-var hero_placement_manager: HeroPlacementManager = null
-
-func _ready():
-	hero_placement_manager = HeroPlacementManagerResource.new()
 
 func setup(seleced_hero: Hero) -> void:
 	hero = seleced_hero
@@ -37,7 +32,7 @@ func _process(_delta: float) -> void:
 
 	global_position = tile_center_position
 	
-	if HeroPlacementManager.is_valid_hero_placement_position(hero, tile_position):
+	if GameManager.hero_placement_manager.is_valid_hero_placement_position(hero, tile_position):
 		hero_sprite.modulate = Color(0.7, 1, 0.7, 1) # Light green color
 	else:
 		hero_sprite.modulate = Color(1, 0.5, 0.5, 0.8) # Light red-transparent color

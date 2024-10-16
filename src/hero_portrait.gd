@@ -4,7 +4,7 @@ class_name HeroPortrait
 
 @export var heroes_selection_ui: HeroesSelectionUI
 var texture_node: TextureRect
-var tilemap: TileMap
+var tilemap: TileMap = GameManager.get_tilemap()
 var is_selected: bool = false
 var hero: Hero
 var is_selection_button: bool # Can change this to an enum if more types are needed
@@ -15,9 +15,8 @@ func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
-func setup(_hero: Hero, _tilemap: TileMap, _heroes_selection_ui: HeroesSelectionUI, _is_selection_button: bool = false):
+func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _is_selection_button: bool = false):
 	hero = _hero
-	tilemap = _tilemap
 	heroes_selection_ui = _heroes_selection_ui
 	is_selection_button = _is_selection_button
 

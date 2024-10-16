@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="TowerDefensePlaceholder"
-run/main_scene="res://DemoLevel.tscn"
+run/main_scene="res://main_menu.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 
 GameManager="*res://src/game_manager.gd"
 Constants="*res://src/constants.gd"
-HeroPlacementManager="*res://src/SetupPhase/hero_placement_manager.gd"
 
 [rendering]
 

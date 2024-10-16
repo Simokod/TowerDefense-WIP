@@ -2,10 +2,15 @@ extends Control
 
 const HeroPortraitResource = preload("res://HeroPortrait.tscn")
 
-@onready var heroes_selection_ui = get_node("/root/DemoLevel/CanvasLayer/HeroesSelectionUI")
-@onready var tilemap = get_node("/root/DemoLevel/LevelTileMap")
+@onready var heroes_selection_ui = get_node("/root/DemoSetupPhase/CanvasLayer/HeroesSelectionUI")
+
 var hero_locations: Dictionary = {}
 var object_locations: Dictionary
+var tilemap
+
+func _init():
+	tilemap = GameManager.get_tilemap()
+
 
 func setup(_object_locations: Dictionary = {}):
 	object_locations = _object_locations
@@ -33,38 +38,28 @@ func _is_empty_tile(tile_pos: Vector2i) -> bool:
 	return tile_pos not in hero_locations.values() and tile_pos not in object_locations.values()
 
 
-func place_hero(hero: Hero) -> bool:
-	var mouse_position = get_global_mouse_position()
-	var tile_position = tilemap.local_to_map(mouse_position)
-
+func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
 	var is_valid_pos = is_valid_hero_placement_position(hero, tile_position, true)
 	if not is_valid_pos:
 		_handle_invalid_placement(hero, tile_position)
 		return false
 	
 	hero_locations[hero.id] = tile_position
-	print("Hero {hero_name} place at {tile_pos}".format({"hero_name": hero.name, "tile_pos": tile_position}))
+	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.name, "tile_pos": tile_position}))
 
 	var hero_portrait: HeroPortrait = HeroPortraitResource.instantiate()
-	hero_portrait.setup(hero, tilemap, heroes_selection_ui)
+	hero_portrait.setup(hero, heroes_selection_ui)
 	hero_portrait.set_to_tile_size()
 
 	var tile_center_delta = tilemap.tile_set.tile_size / 2.0
 	hero_portrait.position = tilemap.map_to_local(tile_position) - tile_center_delta
 
-	GameManager.add_child(hero_portrait)
-
+	GameManager.add_hero_portrait(hero_portrait)
 	return true
 
 func remove_hero(hero: Hero) -> void:
 	hero_locations.erase(hero.id)
-	
-	var hero_nodes = GameManager.get_children()
-	for node in hero_nodes:
-		if node.hero == hero:
-			node.queue_free()
-			print("Hero {hero_name} removed".format({"hero_name": hero.name}))
-			break
+	GameManager.free_hero_portrait(hero)
 
 
 func _handle_invalid_placement(hero: Hero, tile_position: Vector2i):
