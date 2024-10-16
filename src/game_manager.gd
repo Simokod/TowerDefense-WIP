@@ -1,13 +1,10 @@
 extends Node2D
 
-@onready var HeroPlacementManagerResource = preload("res://src/SetupPhase/hero_placement_manager.gd")
 const HeroResource = preload("res://src/hero.gd")
 
 var heroes = Node2D.new()
 var tilemap_scene = preload("res://demo_tile_map.tscn")
 var tilemap
-var hero_placement_manager
-@onready var canvas_layer = $CanvasLayer
 
 func start_game():
 	tilemap = tilemap_scene.instantiate()
@@ -18,7 +15,6 @@ func start_game():
 
 func init_setup_phase():
 	get_tree().change_scene_to_file("res://demo_setup_phase.tscn")
-	hero_placement_manager = HeroPlacementManagerResource.new()
 
 func get_available_heroes() -> Array[Hero]:
 	# TODO make this not hardcoded.
