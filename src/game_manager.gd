@@ -36,6 +36,9 @@ func get_available_heroes() -> Array[Hero]:
 	
 	return [warrior_hero, ranger_hero]
 
+func get_placed_heroes_count():
+	return heroes.get_child_count()
+
 func add_hero_portrait(hero_portrait: HeroPortrait) -> void:
 	heroes.add_child(hero_portrait)
 
