@@ -34,7 +34,10 @@ func on_press(event: InputEvent):
 	if not event is InputEventMouseButton or not event.pressed:
 		return
 	print("HeroPortrait pressed: ", hero.name)
-	heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button)
+
+	if is_instance_valid(heroes_selection_ui): 
+		heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button)
+		
 	accept_event()
 
 func select() -> void:

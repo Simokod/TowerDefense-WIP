@@ -19,4 +19,4 @@ func _process(_delta):
 		disabled = false
 
 func finish_setup():
-	self.queue_free()
+	GameManager.finish_setup()

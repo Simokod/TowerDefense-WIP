@@ -7,7 +7,6 @@ const HoveringHeroResource = preload("res://src/SetupPhase/hovering_hero.gd")
 
 @onready var hero_buttons_container: VBoxContainer = $HeroSelectionContainer
 @onready var tilemap = GameManager.get_tilemap()
-@onready var canvas_layer = get_parent()
 
 var hero_locations: Dictionary = {}
 var object_locations: Dictionary = {}

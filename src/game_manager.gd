@@ -53,4 +53,8 @@ func get_tilemap() -> TileMap:
 	return tilemap.get_child(0)
 
 func finish_setup():
-	print("Finished setup, init round 1")
+	print("Finished setup, init demo level scene")
+	get_tree().change_scene_to_file("res://demo_level.tscn")
+	var enemy_manager: EnemyManager = EnemyManager.new()
+	add_child(enemy_manager)
+	enemy_manager.start_wave()
