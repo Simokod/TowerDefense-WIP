@@ -2,7 +2,9 @@ extends Node2D
 
 class_name IEnemy
 
-var base_speed: int
+@export var base_speed: int
+@export var base_health: int
+
 var tilemap = GameManager.get_tilemap()
 var tile_size = tilemap.tile_set.tile_size
 var move_tween: Tween
@@ -16,7 +18,6 @@ func _ready():
 	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
-	print("tile_center_delta", tile_center_delta)
 
 func set_tile_position(tile_coords: Vector2i):
 	var tile_center_position = (
@@ -24,7 +25,6 @@ func set_tile_position(tile_coords: Vector2i):
 		tile_center_delta
 	)
 
-	print("tile_position", tile_center_position)
 	global_position = tile_center_position
 	
 
