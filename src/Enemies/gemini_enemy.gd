@@ -1,8 +1,8 @@
-extends IEnemy
+extends BaseEnemy
 
 class_name GeminiEnemy
 
-const BASE_SPEED = 3
+const BASE_SPEED = 4
 const BASE_HEALTH = 10
 
 func _ready():

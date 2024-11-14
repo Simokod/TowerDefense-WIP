@@ -6,6 +6,8 @@ var heroes = Node2D.new()
 var tilemap_scene = preload("res://demo_tile_map.tscn")
 var tilemap
 
+var debug_draw_cells = [] ## DEBUG
+
 func start_game():
 	tilemap = tilemap_scene.instantiate()
 	add_child(tilemap)
@@ -58,3 +60,13 @@ func finish_setup():
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
 	enemy_manager.start_wave()
+
+
+func debug_path(cells_to_draw: Array):
+	debug_draw_cells = cells_to_draw
+	queue_redraw()
+
+func _draw():
+	for cell in debug_draw_cells:
+		var pos = get_tilemap().map_to_local(cell)
+		draw_circle(pos, 10, Color(1, 0, 0, 0.5))
