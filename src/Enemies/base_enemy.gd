@@ -15,6 +15,7 @@ var valid_destination_cells: Array[Vector2i] = []
 var move_tween: Tween
 var current_tile_position
 var debug_draw_cells = []
+var debug_walbkable_cells = []
 
 func _ready():
 	var texture_rect = $TextureRect
@@ -41,25 +42,23 @@ func calculate_path() -> Array:
 	astar.clear()
 	valid_destination_cells.clear()
 	
-	var used_cells: Array[Vector2i] = tilemap.get_used_cells(0)
+	var cells: Array[Vector2i] = tilemap.get_used_cells(0)
+	var walkable_cells: Array[Vector2i] = []
 	
-	# Find walkable cells (empty tiles)
-	for cell in used_cells:
+	# Find all walkable cells
+	for cell in cells:
 		var tile_data = tilemap.get_cell_tile_data(0, cell)
-		# Don't add points for tiles occupied by other enemies
-		# This prevents pathfinding from considering these as valid end points
-		# but we can still pass through them during movement
-		if is_walkable_tile(tile_data) and !TileOccupancyManager.is_tile_occupied_by_enemy(cell, self):
-			valid_destination_cells.append(cell)
+		if is_walkable_tile(tile_data):
 			astar.add_point(get_point_id(cell), Vector2(cell.x, cell.y))
+			walkable_cells.append(cell)
 
-			tile_data.modulate = Color(0, 0, 1, 0.3) # DEBUG - can also use for physicist
+			if !TileOccupancyManager.is_tile_occupied_by_enemy(cell, self):
+				valid_destination_cells.append(cell)
+
+			# tile_data.modulate = Color(1, 1, 1, 1) # DEBUG - can also use for physicist
 	
-	# Connect ALL neighboring road tiles, even occupied ones
-	# This allows passing through occupied tiles
-
-	# TODO bug here I think, because the 2 first enemies cut off the path, the 3rd enemy is stuck and doesn't get as close as it can.
-	for cell in valid_destination_cells:
+	# Connect ALL neighboring walkable tiles
+	for cell in walkable_cells:
 		for neighbor in get_hex_neighbors(cell):
 			var neighbor_tile_data = tilemap.get_cell_tile_data(0, neighbor)
 			# Check if it's a road, but don't check if it's occupied
@@ -68,22 +67,82 @@ func calculate_path() -> Array:
 				var neighbor_id = get_point_id(neighbor)
 				if !astar.are_points_connected(cell_id, neighbor_id):
 					astar.connect_points(cell_id, neighbor_id)
+				
+				debug_walbkable_cells.append(cell) # DEBUG
+				
 	
 	var target_pos = find_nearest_target()
 	
-	var path_ids: PackedVector2Array = astar.get_point_path(get_point_id(current_tile_position), get_point_id(target_pos))
-	var path = Array(path_ids).map(func(point): return Vector2i(point.x, point.y))
+	var full_path_ids: PackedVector2Array = astar.get_point_path(get_point_id(current_tile_position), get_point_id(target_pos))
+	var full_path = Array(full_path_ids).map(func(point): return Vector2i(point.x, point.y))
 
-	if path.size() > 0 and path.front() == current_tile_position:
-		path.pop_front()
+	if full_path.size() > 0 and full_path.front() == current_tile_position:
+		full_path.pop_front()
 
+	# Get the position we'd reach this turn
+	var steps_possible = min(base_speed, full_path.size())
+	var turn_end_pos = full_path[steps_possible - 1] if steps_possible > 0 else current_tile_position
+		
+	# If the end position for this turn would be occupied, find a new path
+	if TileOccupancyManager.is_tile_occupied_by_enemy(turn_end_pos, self):
+		# Find nearest unoccupied tile that's within our movement range
+		var alternative_end = find_nearest_accessible_tile(target_pos, steps_possible)
+		if alternative_end != current_tile_position:
+			full_path_ids = astar.get_point_path(
+				get_point_id(current_tile_position),
+				get_point_id(alternative_end)
+			)
+			full_path = Array(full_path_ids).map(func(point): return Vector2i(point.x, point.y))
+			if full_path.size() > 0 and full_path.front() == current_tile_position:
+				full_path.pop_front()
 	
-	for cell in path:
+	for cell in full_path:
 		debug_draw_cells.append(cell) # DEBUG - can also use for physicist
 	
-	GameManager.debug_path(debug_draw_cells)
-	return path
+	GameManager.debug_path(debug_draw_cells, debug_walbkable_cells)
+	return full_path
 
+
+func find_nearest_accessible_tile(target: Vector2i, max_steps: int) -> Vector2i:
+	# Calculate distances from current position to all points (single calculation)
+	var distances_from_start = calculate_distances_from_point(current_tile_position)
+	# Calculate distances from target to all points (single calculation)
+	var distances_to_target = calculate_distances_from_point(target)
+	
+	var nearest_distance = INF
+	var best_tile = current_tile_position
+	var best_steps_used = 0 # Track how many steps the best option uses
+
+	for cell in valid_destination_cells:
+		# Check if we can reach this cell within our movement range
+		var steps_to_cell = distances_from_start.get(get_point_id(cell), INF)
+		if steps_to_cell <= max_steps:
+			# Get the pre-calculated distance from this cell to target
+			var distance_to_target = distances_to_target.get(get_point_id(cell), INF)
+			if distance_to_target < nearest_distance or \
+			   (distance_to_target == nearest_distance and steps_to_cell > best_steps_used):
+				nearest_distance = distance_to_target
+				best_tile = cell
+				best_steps_used = steps_to_cell
+				
+	return best_tile
+
+# New helper function
+func calculate_distances_from_point(point: Vector2i) -> Dictionary:
+	var distances = {}
+	var points_to_process = [get_point_id(point)]
+	distances[get_point_id(point)] = 0
+	
+	while points_to_process.size() > 0:
+		var current = points_to_process.pop_front()
+		var current_distance = distances[current]
+		
+		for connection in astar.get_point_connections(current):
+			if not distances.has(connection) or distances[connection] > current_distance + 1:
+				distances[connection] = current_distance + 1
+				points_to_process.append(connection)
+	
+	return distances
 
 func is_walkable_tile(tile_data: TileData) -> bool:
 	return tile_data.get_custom_data("tile_type") == Constants.TILE_TYPES.ROAD
@@ -125,7 +184,6 @@ func execute_turn():
 	var steps_possible = min(base_speed, path.size())
 	while steps_taken < steps_possible:
 		var next_tile = path.pop_front()
-		print("Taking step, next tile: {next_tile}".format({"next_tile": next_tile}))
 		await move_to_adjacent_tile(next_tile)
 		steps_taken += 1
 
@@ -135,8 +193,6 @@ func move_to_adjacent_tile(next_tile: Vector2i):
 	if move_tween:
 		move_tween.kill()
 	
-	print("Tweening to: {pos}".format({"pos": target_position}))
-	print("cur global: {glo_pos}, cur tile: {cur_pos}".format({"glo_pos": global_position, "cur_pos": current_tile_position}))
 	move_tween = create_tween()
 	move_tween.tween_property(self, "position", target_position, MOVEMENT_ANIMATION_DURATION)
 	await move_tween.finished
