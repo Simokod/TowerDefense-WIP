@@ -9,6 +9,8 @@ var tilemap
 var debug_draw_cells = [] ## DEBUG
 var debug_walkable_cells = []
 
+var config_manager: ConfigManager
+
 func start_game():
 	tilemap = tilemap_scene.instantiate()
 	add_child(tilemap)
@@ -58,11 +60,27 @@ func get_tilemap() -> TileMap:
 func finish_setup():
 	print("Finished setup, init demo level scene")
 	get_tree().change_scene_to_file("res://demo_level.tscn")
+
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
-	enemy_manager.start_wave()
+
+	config_manager = ConfigManager.new()
+	var current_level = config_manager.load_level("demo")
+	var wave_number = 1
+
+	# TODO this should not be a loop, but a signal from the enemy/game/loop manager
+	for wave in current_level.waves:
+		await enemy_manager.start_wave(wave, wave_number)
+		wave_number += 1
+		print("Done wave {wave_number}".format({"wave_number": wave_number}))
+		await get_tree().create_timer(2).timeout
 
 
+func get_spawn_points() -> Array[Vector2]:
+	return config_manager.current_level.spawn_points
+
+
+### Move to DEBUG MANAGER THINGY
 func debug_path(_debug_draw_cells: Array, _debug_walkable_cells: Array):
 	debug_draw_cells = _debug_draw_cells
 	debug_walkable_cells = _debug_walkable_cells
@@ -74,7 +92,6 @@ func clear_debug_paths():
 	queue_redraw()
 
 func _draw():
-	print("drawing", debug_draw_cells, debug_walkable_cells)
 	for cell in debug_draw_cells:
 		var pos = get_tilemap().map_to_local(cell)
 		draw_circle(pos, 10, Color(1, 0, 0, 1))

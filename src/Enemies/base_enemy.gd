@@ -31,9 +31,7 @@ func set_tile_position(tile_coords: Vector2i):
 		tile_center_delta
 	)
 
-	print("yo: {tile_pos}".format({"tile_pos": tilemap.map_to_local(tile_coords)}))
 	global_position = tile_center_position
-	# global_position = tilemap.map_to_local(tile_coords)
 	current_tile_position = tile_coords
 	print("Initiallized enemy, global_pos: {global_pos}, tile: {tile}".format({"global_pos": global_position, "tile": tile_coords}))
 
@@ -55,7 +53,7 @@ func calculate_path() -> Array:
 			if !TileOccupancyManager.is_tile_occupied_by_enemy(cell, self):
 				valid_destination_cells.append(cell)
 
-			# tile_data.modulate = Color(1, 1, 1, 1) # DEBUG - can also use for physicist
+			tile_data.modulate = Color(1, 1, 1, 0.5) # DEBUG - can also use for physicist
 	
 	# Connect ALL neighboring walkable tiles
 	for cell in walkable_cells:
