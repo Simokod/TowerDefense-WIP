@@ -12,7 +12,7 @@ func start_wave(wave_config: WaveConfig, wave_number: int):
 		print("Spawning group {group}".format({"group": group}))
 		# 1. spawn enemies
 		for i in range(group.count):
-			print("Spawning enemy {i} of {count}".format({"i": i, "count": group.count}))
+			print("Spawning enemy {i} of {count}".format({"i": i + 1, "count": group.count}))
 			var enemy_scene: PackedScene = Constants.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
 			var ememy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
@@ -23,7 +23,8 @@ func start_wave(wave_config: WaveConfig, wave_number: int):
 			print("Done moving")
 
 			await get_tree().create_timer(1).timeout # TODO Should change waiting mechanism?
-			GameManager.clear_debug_paths()
+			if GameManager.is_debug_mode():
+				GameManager.get_debugger().clear_debug_paths()
 			await get_tree().create_timer(0.5).timeout
 			# 3. end turn
 

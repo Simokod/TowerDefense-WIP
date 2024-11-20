@@ -97,7 +97,9 @@ func calculate_path() -> Array:
 	for cell in full_path:
 		debug_draw_cells.append(cell) # DEBUG - can also use for physicist
 	
-	GameManager.debug_path(debug_draw_cells, debug_walbkable_cells)
+	if GameManager.is_debug_mode():
+		GameManager.get_debugger().debug_path(debug_draw_cells, debug_walbkable_cells)
+		
 	return full_path
 
 

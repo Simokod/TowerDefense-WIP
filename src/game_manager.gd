@@ -1,20 +1,25 @@
 extends Node2D
 
 const HeroResource = preload("res://src/hero.gd")
-
-var heroes = Node2D.new()
-var tilemap_scene = preload("res://demo_tile_map.tscn")
-var tilemap
-
-var debug_draw_cells = [] ## DEBUG
-var debug_walkable_cells = []
+const DebuggerResource = preload("res://src/Debugger/debugger.gd")
 
 var config_manager: ConfigManager
+var debugger: Debugger
+
+var DEBUG_MODE = OS.has_feature("editor")
+
+var heroes_container = Node2D.new()
+var tilemap_scene = preload("res://demo_tile_map.tscn")
+var tilemap
 
 func start_game():
 	tilemap = tilemap_scene.instantiate()
 	add_child(tilemap)
-	add_child(heroes)
+	add_child(heroes_container)
+	
+	if DEBUG_MODE:
+		debugger = DebuggerResource.new()
+		add_child(debugger)
 
 	init_setup_phase()
 
@@ -42,13 +47,13 @@ func get_available_heroes() -> Array[Hero]:
 	return [warrior_hero, ranger_hero]
 
 func get_placed_heroes_count():
-	return heroes.get_child_count()
+	return heroes_container.get_child_count()
 
 func add_hero_portrait(hero_portrait: HeroPortrait) -> void:
-	heroes.add_child(hero_portrait)
+	heroes_container.add_child(hero_portrait)
 
 func free_hero_portrait(hero: Hero) -> void:
-	for node in heroes.get_children():
+	for node in heroes_container.get_children():
 		if node.hero == hero:
 			node.queue_free()
 			print("Hero {hero_name} removed".format({"hero_name": hero.name}))
@@ -71,37 +76,17 @@ func finish_setup():
 	# TODO this should not be a loop, but a signal from the enemy/game/loop manager
 	for wave in current_level.waves:
 		await enemy_manager.start_wave(wave, wave_number)
-		wave_number += 1
 		print("Done wave {wave_number}".format({"wave_number": wave_number}))
 		await get_tree().create_timer(2).timeout
+		wave_number += 1
 
 
-func get_spawn_points() -> Array[Vector2]:
+func get_spawn_points() -> Array[Vector2i]:
 	return config_manager.current_level.spawn_points
 
 
-### Move to DEBUG MANAGER THINGY
-func debug_path(_debug_draw_cells: Array, _debug_walkable_cells: Array):
-	debug_draw_cells = _debug_draw_cells
-	debug_walkable_cells = _debug_walkable_cells
-	queue_redraw()
+func is_debug_mode() -> bool:
+	return DEBUG_MODE
 
-func clear_debug_paths():
-	debug_draw_cells.clear()
-	debug_walkable_cells.clear()
-	queue_redraw()
-
-func _draw():
-	for cell in debug_draw_cells:
-		var pos = get_tilemap().map_to_local(cell)
-		draw_circle(pos, 10, Color(1, 0, 0, 1))
-
-	for cell in debug_walkable_cells:
-		var pos = get_tilemap().map_to_local(cell)
-		var size = 10
-		var points = PackedVector2Array([
-			pos + Vector2(0, -2 * size), # top point
-			pos + Vector2(-size, -3 * size), # bottom left
-			pos + Vector2(size, -3 * size) # bottom right
-		])
-		draw_colored_polygon(points, Color(0, 1, 0, 1))
+func get_debugger() -> Debugger:
+	return debugger if DEBUG_MODE else null
