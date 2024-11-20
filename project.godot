@@ -17,9 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://src/game_manager.gd"
 Constants="*res://src/constants.gd"
-TileOccupancyManager="*res://src/tile_occupancy_manager.gd"
+GameManager="*res://src/Managers/game_manager.gd"
+TileOccupancyManager="*res://src/Managers/tile_occupancy_manager.gd"
 
 [rendering]
 

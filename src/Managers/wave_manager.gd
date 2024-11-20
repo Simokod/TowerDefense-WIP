@@ -28,7 +28,7 @@ func start_next_wave() -> void:
 
 func spawn_wave(wave_config: WaveConfig, wave_number: int) -> void:
     print("Starting wave {number}".format({"number": wave_number}))
-    enemy_manager.spawn_wave(wave_config)
+    enemy_manager.start_wave(wave_config)
 
 func _on_all_enemies_defeated() -> void:
     print("Wave {number} completed".format({"number": current_wave_number}))

@@ -68,17 +68,13 @@ func finish_setup():
 
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
+    
+	var wave_manager = WaveManager.new(enemy_manager)
+	add_child(wave_manager)
 
 	config_manager = ConfigManager.new()
 	var current_level = config_manager.load_level("demo")
-	var wave_number = 1
-
-	# TODO this should not be a loop, but a signal from the enemy/game/loop manager
-	for wave in current_level.waves:
-		await enemy_manager.start_wave(wave, wave_number)
-		print("Done wave {wave_number}".format({"wave_number": wave_number}))
-		await get_tree().create_timer(2).timeout
-		wave_number += 1
+	wave_manager.initialize_waves(current_level.waves)
 
 
 func get_spawn_points() -> Array[Vector2i]:
