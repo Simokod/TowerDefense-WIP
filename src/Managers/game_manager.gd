@@ -16,7 +16,7 @@ func start_game():
 	tilemap = tilemap_scene.instantiate()
 	add_child(tilemap)
 	add_child(heroes_container)
-	
+
 	if DEBUG_MODE:
 		debugger = DebuggerResource.new()
 		add_child(debugger)
@@ -64,11 +64,11 @@ func get_tilemap() -> TileMap:
 
 func finish_setup():
 	print("Finished setup, init demo level scene")
-	get_tree().change_scene_to_file("res://demo_level.tscn")
+	get_tree().change_scene_to_file("res://demo_level.tscn") # TODO: Refactor this to use some level manager
 
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
-    
+	
 	var wave_manager = WaveManager.new(enemy_manager)
 	add_child(wave_manager)
 

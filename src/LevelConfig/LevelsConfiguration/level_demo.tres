@@ -37,5 +37,5 @@ enemy_groups = Array[ExtResource("2_e50dp")]([SubResource("Resource_x4566"), Sub
 script = ExtResource("1_yryuw")
 level_id = 1
 map_scene_path = ""
-spawn_points = Array[Vector2]([Vector2(0, 0), Vector2(1, 0)])
+spawn_points = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0)])
 waves = Array[ExtResource("2_61dbq")]([SubResource("Resource_plehq"), SubResource("Resource_o78qi")])
