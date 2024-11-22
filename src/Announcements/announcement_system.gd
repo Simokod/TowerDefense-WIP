@@ -1,9 +1,10 @@
 extends Control
 
+signal finished
 func _ready():
 	hide()
 
-func announce(message: String, duration: float = 3) -> void:
+func announce(message: String, duration: float = 3) -> Signal:
 	# Show announcement
 	$PanelContainer/MarginContainer/Label.text = message
 	show()
@@ -23,3 +24,5 @@ func announce(message: String, duration: float = 3) -> void:
 	await tween_out.finished
 
 	hide()
+
+	return finished
