@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dysptneysyaun"]
+[gd_scene load_steps=4 format=3 uid="uid://b4wav06we1w06"]
 
-[ext_resource type="Script" path="res://src/SetupPhase/heroes_selection_UI.gd" id="1_s0yl6"]
-[ext_resource type="Script" path="res://src/SetupPhase/finish_setup_button.gd" id="2_bu26x"]
+[ext_resource type="Script" path="res://src/main.gd" id="1_0vhv6"]
+[ext_resource type="Script" path="res://src/SetupPhase/heroes_selection_UI.gd" id="1_nqa8s"]
+[ext_resource type="Script" path="res://src/SetupPhase/finish_setup_button.gd" id="2_oo1t2"]
 
-[node name="DemoSetupPhase" type="Node2D"]
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0vhv6")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -17,7 +19,8 @@ offset_left = 0.279968
 offset_top = -0.208
 offset_right = 121.28
 offset_bottom = 76.792
-script = ExtResource("1_s0yl6")
+script = ExtResource("1_nqa8s")
+metadata/_edit_use_anchors_ = true
 
 [node name="HeroSelectionContainer" type="VBoxContainer" parent="CanvasLayer/HeroesSelectionUI"]
 layout_mode = 1
@@ -30,6 +33,7 @@ offset_left = 0.0139999
 offset_top = 0.0340042
 offset_right = 129.014
 offset_bottom = 347.034
+metadata/_edit_use_anchors_ = true
 
 [node name="FinishSetupButton" type="Button" parent="CanvasLayer"]
 offset_left = 416.0
@@ -38,6 +42,7 @@ offset_right = 518.0
 offset_bottom = 514.0
 scale = Vector2(2.77941, 3.31525)
 text = "Finish setup"
-script = ExtResource("2_bu26x")
+script = ExtResource("2_oo1t2")
+metadata/_edit_use_anchors_ = true
 
 [connection signal="pressed" from="CanvasLayer/FinishSetupButton" to="CanvasLayer/FinishSetupButton" method="finish_setup"]

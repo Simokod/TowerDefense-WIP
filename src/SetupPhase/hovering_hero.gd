@@ -2,7 +2,8 @@ extends Control
 
 class_name HoveringHero
 
-@onready var tilemap = GameManager.get_tilemap()
+# @onready var tilemap = GameManager.get_tilemap()
+var tilemap: TileMap = null
 
 var hero: Hero = null
 var hero_sprite: TextureRect = null
@@ -10,6 +11,8 @@ var tile_center_delta: Vector2 = Vector2()
 var heroes_selection_ui: HeroesSelectionUI
 
 func setup(seleced_hero: Hero, _heroes_selection_ui: HeroesSelectionUI) -> void:
+	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+
 	hero = seleced_hero
 	var texture_rect = TextureRect.new()
 	texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

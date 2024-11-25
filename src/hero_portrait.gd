@@ -4,7 +4,8 @@ class_name HeroPortrait
 
 @export var heroes_selection_ui: HeroesSelectionUI
 var texture_node: TextureRect
-var tilemap: TileMap = GameManager.get_tilemap()
+# var tilemap: TileMap = GameManager.get_tilemap()
+var tilemap: TileMap = null
 var is_selected: bool = false
 var hero: Hero
 var is_selection_button: bool # Can change this to an enum if more types are needed
@@ -15,9 +16,10 @@ func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
-func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _is_selection_button: bool = false):
+func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap, _is_selection_button: bool = false):
 	hero = _hero
 	heroes_selection_ui = _heroes_selection_ui
+	tilemap = _tilemap
 	is_selection_button = _is_selection_button
 
 	texture_normal = hero.sprite
@@ -35,7 +37,7 @@ func on_press(event: InputEvent):
 		return
 	print("HeroPortrait pressed: ", hero.name)
 
-	if is_instance_valid(heroes_selection_ui): 
+	if is_instance_valid(heroes_selection_ui):
 		heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button)
 		
 	accept_event()

@@ -5,6 +5,11 @@ class_name Debugger
 var debug_draw_cells = []
 var debug_walkable_cells = []
 
+var tilemap: TileMap
+
+func _ready():
+    tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+
 func debug_path(_debug_draw_cells: Array, _debug_walkable_cells: Array):
     debug_draw_cells = _debug_draw_cells
     debug_walkable_cells = _debug_walkable_cells
@@ -17,11 +22,11 @@ func clear_debug_paths():
 
 func _draw():
     for cell in debug_draw_cells:
-        var pos = get_parent().get_tilemap().map_to_local(cell)
+        var pos = tilemap.map_to_local(cell)
         draw_circle(pos, 10, Color(1, 0, 0, 1))
 
     for cell in debug_walkable_cells:
-        var pos = get_parent().get_tilemap().map_to_local(cell)
+        var pos = tilemap.map_to_local(cell)
         var size = 10
         var points = PackedVector2Array([
             pos + Vector2(0, -2 * size), # top point

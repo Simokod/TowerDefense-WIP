@@ -6,8 +6,9 @@ const MOVEMENT_ANIMATION_DURATION = 0.3
 @export var base_speed: int
 @export var base_health: int
 
-var tilemap = GameManager.get_tilemap()
-var tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
+# var tilemap = GameManager.get_tilemap()
+var tilemap: TileMap = null
+var tile_center_delta = Vector2(0, 0)
 
 var astar = AStar2D.new()
 var valid_destination_cells: Array[Vector2i] = []
@@ -18,12 +19,14 @@ var debug_draw_cells = []
 var debug_walbkable_cells = []
 
 func _ready():
+	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
+
 	var texture_rect = $TextureRect
 	texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_rect.custom_minimum_size = tilemap.tile_set.tile_size * 0.9
-
 
 func set_tile_position(tile_coords: Vector2i):
 	var tile_center_position = (
@@ -53,7 +56,6 @@ func calculate_path() -> Array:
 			if !TileOccupancyManager.is_tile_occupied_by_enemy(cell, self):
 				valid_destination_cells.append(cell)
 
-			tile_data.modulate = Color(1, 1, 1, 0.5) # DEBUG - can also use for physicist
 	
 	# Connect ALL neighboring walkable tiles
 	for cell in walkable_cells:
@@ -104,9 +106,7 @@ func calculate_path() -> Array:
 
 
 func find_nearest_accessible_tile(target: Vector2i, max_steps: int) -> Vector2i:
-	# Calculate distances from current position to all points (single calculation)
 	var distances_from_start = calculate_distances_from_point(current_tile_position)
-	# Calculate distances from target to all points (single calculation)
 	var distances_to_target = calculate_distances_from_point(target)
 	
 	var nearest_distance = INF
@@ -147,7 +147,6 @@ func calculate_distances_from_point(point: Vector2i) -> Dictionary:
 func is_walkable_tile(tile_data: TileData) -> bool:
 	return tile_data.get_custom_data("tile_type") == Constants.TILE_TYPES.ROAD
 
-# Convert 2D coordinates to unique identifier
 func get_point_id(point: Vector2i) -> int:
 	var bounds = tilemap.get_used_rect()
 	return point.x + bounds.size.x * point.y

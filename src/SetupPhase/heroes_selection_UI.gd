@@ -2,11 +2,12 @@ extends Control
 
 class_name HeroesSelectionUI
 
-const HeroPortraitResource = preload("res://HeroPortrait.tscn")
+const HeroPortraitResource = preload("res://Scenes/HeroPortrait.tscn")
 const HoveringHeroResource = preload("res://src/SetupPhase/hovering_hero.gd")
 
 @onready var hero_buttons_container: VBoxContainer = $HeroSelectionContainer
-@onready var tilemap = GameManager.get_tilemap()
+# @onready var tilemap = GameManager.get_tilemap()
+var tilemap: TileMap = null
 
 var hero_locations: Dictionary = {}
 var object_locations: Dictionary = {}
@@ -16,6 +17,11 @@ var hovering_hero: HoveringHero = null
 
 func _ready():
 	set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
+
+# New initialization method to be called after level is loaded
+func initialize():
+	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	
 	var available_heroes = GameManager.get_available_heroes()
 	for hero in available_heroes:
 		create_hero_button(hero)
@@ -28,7 +34,7 @@ func setup(_object_locations: Dictionary = {}):
 func create_hero_button(hero):
 	var hero_selection_button: HeroPortrait = HeroPortraitResource.instantiate()
 	const is_selection_button = true
-	hero_selection_button.setup(hero, self, is_selection_button)
+	hero_selection_button.setup(hero, self, tilemap, is_selection_button)
 	
 	hero_buttons_container.add_child(hero_selection_button)
 
@@ -72,7 +78,7 @@ func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: 
 	if not is_instance_valid(selected_hero_button):
 		if not is_selection_button:
 			selected_hero_button = new_selected_button.duplicate()
-			selected_hero_button.setup(new_selected_button.hero, self, is_selection_button)
+			selected_hero_button.setup(new_selected_button.hero, self, tilemap, is_selection_button)
 		else:
 			selected_hero_button = new_selected_button
 
@@ -152,7 +158,7 @@ func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
 	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.name, "tile_pos": tile_position}))
 
 	var hero_portrait: HeroPortrait = HeroPortraitResource.instantiate()
-	hero_portrait.setup(hero, self)
+	hero_portrait.setup(hero, self, tilemap)
 	hero_portrait.set_to_tile_size()
 
 	var tile_center_delta = tilemap.tile_set.tile_size / 2.0

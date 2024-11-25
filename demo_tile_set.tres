@@ -1,0 +1,33 @@
+[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://c4x0cr1urx37j"]
+
+[ext_resource type="Texture2D" uid="uid://mvgo8ena0tyj" path="res://Images/Gemini_Generated_Image_j9tucyj9tucyj9tu-removebg-preview.png" id="1_vs1on"]
+[ext_resource type="Texture2D" uid="uid://bx5c2h4fgnyxf" path="res://Images/Gemini_Generated_Image_j9tud0j9tud0j9tu-removebg-preview.png" id="2_y4kw4"]
+[ext_resource type="Texture2D" uid="uid://brtpmie66fbn6" path="res://Images/Gemini_Generated_Image_ohmuhqohmuhqohmu-removebg-preview.png" id="3_jjp7a"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lcibo"]
+texture = ExtResource("1_vs1on")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/custom_data_0 = "road"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vc1hu"]
+texture = ExtResource("2_y4kw4")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/custom_data_0 = "water"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_o02pp"]
+texture = ExtResource("3_jjp7a")
+texture_region_size = Vector2i(64, 64)
+0:0/0 = 0
+0:0/0/custom_data_0 = "forest"
+
+[resource]
+tile_shape = 3
+tile_offset_axis = 1
+tile_size = Vector2i(64, 64)
+custom_data_layer_0/name = "tile_type"
+custom_data_layer_0/type = 4
+sources/3 = SubResource("TileSetAtlasSource_lcibo")
+sources/4 = SubResource("TileSetAtlasSource_vc1hu")
+sources/5 = SubResource("TileSetAtlasSource_o02pp")

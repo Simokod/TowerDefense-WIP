@@ -6,7 +6,7 @@ const TILE_TYPES = {
   "FOREST": "forest"
 }
 
-const gemini_enemy = preload("res://gemini_enemy.tscn")
+const gemini_enemy = preload("res://scenes/enemies/gemini_enemy.tscn")
 
 const ENEMY_SCENES = {
   "gemini_enemy": gemini_enemy

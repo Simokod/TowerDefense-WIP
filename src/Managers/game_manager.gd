@@ -5,26 +5,22 @@ const DebuggerResource = preload("res://src/Debugger/debugger.gd")
 
 var config_manager: ConfigManager
 var debugger: Debugger
+var ui_layer: CanvasLayer
 
 var DEBUG_MODE = OS.has_feature("editor")
 
 var heroes_container = Node2D.new()
-var tilemap_scene = preload("res://demo_tile_map.tscn")
-var tilemap
 
 func start_game():
-	tilemap = tilemap_scene.instantiate()
-	add_child(tilemap)
 	add_child(heroes_container)
 
 	if DEBUG_MODE:
+		ui_layer = CanvasLayer.new()
+		ui_layer.layer = Layers.DEBUG
+		add_child(ui_layer)
+		
 		debugger = DebuggerResource.new()
-		add_child(debugger)
-
-	init_setup_phase()
-
-func init_setup_phase():
-	get_tree().change_scene_to_file("res://demo_setup_phase.tscn")
+		ui_layer.add_child(debugger)
 
 func get_available_heroes() -> Array[Hero]:
 	# TODO make this not hardcoded.
@@ -59,13 +55,9 @@ func free_hero_portrait(hero: Hero) -> void:
 			print("Hero {hero_name} removed".format({"hero_name": hero.name}))
 			break
 
-func get_tilemap() -> TileMap:
-	return tilemap.get_child(0)
 
 func finish_setup():
-	print("Finished setup, init demo level scene")
-	get_tree().change_scene_to_file("res://demo_level.tscn") # TODO: Refactor this to use some level manager
-
+	print("GameManager: Finished setup")
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
 	

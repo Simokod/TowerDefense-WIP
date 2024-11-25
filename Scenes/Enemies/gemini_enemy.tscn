@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2tjhs8bj7fof"]
+
+[ext_resource type="Script" path="res://src/Enemies/gemini_enemy.gd" id="1_nl27k"]
+[ext_resource type="Texture2D" uid="uid://dh8663pjyi13m" path="res://Images/Enemies/Enemy_image-removebg-preview.png" id="2_dk57r"]
+
+[node name="GeminiEnemy" type="Node2D"]
+script = ExtResource("1_nl27k")
+base_speed = 10
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_dk57r")
+expand_mode = 1
+stretch_mode = 5
