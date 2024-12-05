@@ -21,13 +21,14 @@ func start_wave(wave_config: WaveConfig):
 			var enemy_scene: PackedScene = Constants.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
 			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
-			
+
+			AnnouncementSystem.announce_turn_start(enemy.name)
 			await enemy.take_turn()
 			enemy_spawned_and_moved.emit(enemy)
 
 			await get_tree().create_timer(1).timeout # TODO Should change waiting mechanism?
-			if GameManager.is_debug_mode():
-				GameManager.get_debugger().clear_debug_paths()
+			# if GameManager.is_debug_mode():
+			# 	GameManager.get_debugger().clear_debug_paths()
 			await get_tree().create_timer(0.5).timeout
 
 

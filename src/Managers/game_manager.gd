@@ -5,6 +5,7 @@ const DebuggerResource = preload("res://src/Debugger/debugger.gd")
 
 var DEBUG_MODE = OS.has_feature("editor")
 var config_manager: ConfigManager
+var turn_manager: TurnManager
 var debugger: Debugger
 var ui_layer: CanvasLayer
 
@@ -60,7 +61,7 @@ func start_gameplay():
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
 
-	var turn_manager: TurnManager = TurnManager.new(enemy_manager)
+	turn_manager = TurnManager.new(enemy_manager)
 	add_child(turn_manager)
 
 	var wave_manager = WaveManager.new(enemy_manager)

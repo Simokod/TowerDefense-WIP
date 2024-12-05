@@ -5,7 +5,9 @@ enum GamePhase {
 	GAMEPLAY
 }
 
+
 @export_file("*.tscn") var level_scene_path = "res://scenes/levels/demo_level.tscn"
+const UIScene = preload("res://Scenes/ui.tscn")
 
 var current_level: Node
 var current_phase: GamePhase = GamePhase.SETUP
@@ -32,7 +34,11 @@ func _on_finish_setup_pressed():
 	start_gameplay()
 
 func start_gameplay():
-	GameManager.start_gameplay()
+	await GameManager.start_gameplay()
+	
+	var ui = UIScene.instantiate()
+	$CanvasLayer.add_child(ui)
+	ui.set_turn_manager(GameManager.turn_manager)
 
 func get_tilemap() -> TileMap:
 	return current_level.get_node("LevelTileMap")

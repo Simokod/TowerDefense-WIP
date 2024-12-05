@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=3 uid="uid://crnngmipn5b5h"]
+
+[ext_resource type="Script" path="res://src/UI/ui.gd" id="1_dhv53"]
+[ext_resource type="Script" path="res://src/UI/abilities_container.gd" id="2_bo44l"]
+[ext_resource type="Script" path="res://src/UI/end_turn_button.gd" id="2_rtyj3"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dhv53")
+
+[node name="TurnOrderPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = -40.0
+offset_bottom = 100.0
+
+[node name="TurnOrderLabel" type="Label" parent="TurnOrderPanel"]
+layout_mode = 2
+text = "Turn order:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AbilitiesContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.7
+anchor_right = 0.7
+anchor_bottom = 0.7
+offset_left = 20.0
+offset_top = -40.0
+offset_right = -20.0
+offset_bottom = 40.0
+script = ExtResource("2_bo44l")
+
+[node name="AbilityButton1" type="Button" parent="AbilitiesContainer"]
+custom_minimum_size = Vector2(120, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Ability 1"
+
+[node name="AbilityButton2" type="Button" parent="AbilitiesContainer"]
+custom_minimum_size = Vector2(120, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Ability 2"
+
+[node name="EndTurnButton" type="Button" parent="."]
+custom_minimum_size = Vector2(160, 80)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_top = 0.7
+anchor_right = 0.8
+anchor_bottom = 0.7
+offset_left = -50.0
+offset_top = -40.0
+offset_right = 37.5
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "End turn"
+script = ExtResource("2_rtyj3")

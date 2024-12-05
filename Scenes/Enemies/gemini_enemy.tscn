@@ -5,7 +5,6 @@
 
 [node name="GeminiEnemy" type="Node2D"]
 script = ExtResource("1_nl27k")
-base_speed = 10
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 40.0

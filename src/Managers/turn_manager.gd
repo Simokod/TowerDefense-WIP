@@ -58,7 +58,6 @@ func _start_unit_turn(turn_unit: ActiveUnit):
 	AnnouncementSystem.announce_turn_start(turn_unit.unit.name)
 	
 	if turn_unit.unit is BaseEnemy:
-		# Automatically process enemy turn
 		await _process_enemy_turn(turn_unit)
 		end_current_turn()
 
@@ -69,7 +68,7 @@ func _process_enemy_turn(turn_unit: ActiveUnit):
 func end_current_turn():
 	if current_unit == null:
 		return
-		
+
 	current_unit.initiative = 0.0
 	turn_ended.emit(current_unit.unit)
 	current_unit = null
