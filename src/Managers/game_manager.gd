@@ -3,15 +3,14 @@ extends Node2D
 const HeroResource = preload("res://src/hero.gd")
 const DebuggerResource = preload("res://src/Debugger/debugger.gd")
 
+var DEBUG_MODE = OS.has_feature("editor")
 var config_manager: ConfigManager
 var debugger: Debugger
 var ui_layer: CanvasLayer
 
-var DEBUG_MODE = OS.has_feature("editor")
-
 var heroes_container = Node2D.new()
 
-func start_game():
+func initialize_game():
 	add_child(heroes_container)
 
 	if DEBUG_MODE:
@@ -28,16 +27,16 @@ func get_available_heroes() -> Array[Hero]:
 	warrior_hero.id = 1
 	warrior_hero.name = "Warrior"
 	warrior_hero.sprite = preload("res://Images/Heroes/Warrior/Warrior-portrait-removebg-preview.png")
-	warrior_hero.health = 100
-	warrior_hero.attack = 10
+	warrior_hero.max_health = 100
+	warrior_hero.initiative = 25
 	warrior_hero.allowed_tiles = [Constants.TILE_TYPES.ROAD, Constants.TILE_TYPES.FOREST]
 	
 	var ranger_hero = HeroResource.new()
 	ranger_hero.id = 2
 	ranger_hero.name = "Ranger"
 	ranger_hero.sprite = preload("res://Images/Heroes/Ranger/Ranger_portrait_removed_bg.png")
-	ranger_hero.health = 80
-	ranger_hero.attack = 13
+	ranger_hero.max_health = 80
+	ranger_hero.initiative = 20
 	ranger_hero.allowed_tiles = [Constants.TILE_TYPES.FOREST]
 	
 	return [warrior_hero, ranger_hero]
@@ -56,17 +55,23 @@ func free_hero_portrait(hero: Hero) -> void:
 			break
 
 
-func finish_setup():
-	print("GameManager: Finished setup")
+func start_gameplay():
+	print("GameManager: Starting gameplay")
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
-	
+
+	var turn_manager: TurnManager = TurnManager.new(enemy_manager)
+	add_child(turn_manager)
+
 	var wave_manager = WaveManager.new(enemy_manager)
 	add_child(wave_manager)
 
 	config_manager = ConfigManager.new()
 	var current_level = config_manager.load_level("demo")
-	wave_manager.initialize_waves(current_level.waves)
+	await wave_manager.initialize_waves(current_level.waves)
+	
+	for hero in heroes_container.get_children():
+		turn_manager.register_unit(hero.hero)
 
 
 func get_spawn_points() -> Array[Vector2i]:

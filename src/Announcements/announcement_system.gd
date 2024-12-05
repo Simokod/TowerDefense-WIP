@@ -25,7 +25,6 @@ func _set_announcement_position(announcement_position: Position, custom_anchor_y
 			$PanelContainer.set_anchor(SIDE_RIGHT, 0.5, true)
 			$PanelContainer.set_anchor(SIDE_TOP, custom_anchor_y, true)
 			$PanelContainer.set_anchor(SIDE_BOTTOM, custom_anchor_y, true)
-			# $PanelContainer.set_offset(SIDE_LEFT, -$PanelContainer.size.x / 2)
 		Position.CENTER:
 			$PanelContainer.set_anchors_preset(Control.PRESET_CENTER, true)
 		Position.TOP:
@@ -47,12 +46,16 @@ func announce_wave_start(wave_number: int) -> void:
 	await _announce("Wave {number}".format({"number": wave_number}), 1.5)
 
 
-func announce_turn_completed(wave_number: int) -> void:
+func announce_turn_start(unit_name: String) -> void:
 	_set_announcement_position(Position.CUSTOM, 0.9)
-	await _announce("Turn {number} completed, player turn starts.".format({"number": wave_number}), 1.5)
+	await _announce("{unit_name} turn".format({"unit_name": unit_name}), 1.5)
+
 
 func _announce(message: String, duration: float) -> Signal:
 	$PanelContainer/MarginContainer/Label.text = message
+	$PanelContainer/MarginContainer.add_theme_constant_override("margin_left", 20)
+	$PanelContainer/MarginContainer.add_theme_constant_override("margin_right", 20)
+	
 	show()
 	$PanelContainer.modulate = Color(1, 1, 1, 0)
 

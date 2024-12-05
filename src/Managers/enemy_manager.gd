@@ -3,6 +3,7 @@ extends Node2D
 class_name EnemyManager
 
 signal all_enemies_defeated
+signal enemy_spawned_and_moved(enemy: BaseEnemy)
 
 var active_enemies: Array = []
 var enemy_layer: CanvasLayer
@@ -19,8 +20,10 @@ func start_wave(wave_config: WaveConfig):
 			print("Spawning enemy {i} of {count}".format({"i": i + 1, "count": group.count}))
 			var enemy_scene: PackedScene = Constants.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
-			var ememy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
-			await ememy.execute_turn()
+			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
+			
+			await enemy.take_turn()
+			enemy_spawned_and_moved.emit(enemy)
 
 			await get_tree().create_timer(1).timeout # TODO Should change waiting mechanism?
 			if GameManager.is_debug_mode():
@@ -35,7 +38,6 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
 	enemy_layer.add_child(enemy_instance)
-	enemy_instance._ready()
 	enemy_instance.set_tile_position(spawn_tile)
 	
 	active_enemies.append(enemy_instance)

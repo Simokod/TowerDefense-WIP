@@ -1,12 +1,8 @@
-extends Node2D
+extends Unit
 
 class_name BaseEnemy
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
-@export var base_speed: int
-@export var base_health: int
-
-# var tilemap = GameManager.get_tilemap()
 var tilemap: TileMap = null
 var tile_center_delta = Vector2(0, 0)
 
@@ -80,7 +76,7 @@ func calculate_path() -> Array:
 		full_path.pop_front()
 
 	# Get the position we'd reach this turn
-	var steps_possible = min(base_speed, full_path.size())
+	var steps_possible = min(movement_speed, full_path.size())
 	var turn_end_pos = full_path[steps_possible - 1] if steps_possible > 0 else current_tile_position
 		
 	# If the end position for this turn would be occupied, find a new path
@@ -177,10 +173,10 @@ func find_nearest_target():
 	return Vector2i(23, 7) # Placeholder target
 
 	
-func execute_turn():
+func take_turn():
 	var path = calculate_path()
 	var steps_taken = 0
-	var steps_possible = min(base_speed, path.size())
+	var steps_possible = min(movement_speed, path.size())
 	while steps_taken < steps_possible:
 		var next_tile = path.pop_front()
 		await move_to_adjacent_tile(next_tile)

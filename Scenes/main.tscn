@@ -44,5 +44,3 @@ scale = Vector2(2.77941, 3.31525)
 text = "Finish setup"
 script = ExtResource("2_oo1t2")
 metadata/_edit_use_anchors_ = true
-
-[connection signal="pressed" from="CanvasLayer/FinishSetupButton" to="CanvasLayer/FinishSetupButton" method="finish_setup"]

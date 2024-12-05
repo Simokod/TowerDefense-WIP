@@ -14,7 +14,7 @@ var current_phase: GamePhase = GamePhase.SETUP
 
 func _ready():
 	load_level(level_scene_path)
-	GameManager.start_game()
+	GameManager.initialize_game()
 	
 	heroes_selection_ui.initialize()
 	$CanvasLayer/FinishSetupButton.pressed.connect(_on_finish_setup_pressed)
@@ -32,8 +32,7 @@ func _on_finish_setup_pressed():
 	start_gameplay()
 
 func start_gameplay():
-	# Initialize gameplay systems
-	pass
+	GameManager.start_gameplay()
 
 func get_tilemap() -> TileMap:
 	return current_level.get_node("LevelTileMap")

@@ -17,6 +17,3 @@ func _process(_delta):
 		disabled = true
 	else:
 		disabled = false
-
-func finish_setup():
-	GameManager.finish_setup()
