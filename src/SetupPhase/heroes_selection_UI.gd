@@ -55,7 +55,7 @@ func stop_hovering() -> void:
 func deselect_hero() -> void:
 	if selected_hero_button == null:
 		return
-	print("Deselected hero: ", selected_hero_button.hero.name)
+	print("Deselected hero: ", selected_hero_button.hero.unit_name)
 	selected_hero_button.deselect()
 	selected_hero_button = null
 	stop_hovering()
@@ -155,7 +155,7 @@ func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
 		return false
 	
 	hero_locations[hero.id] = tile_position
-	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.name, "tile_pos": tile_position}))
+	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))
 
 	var hero_portrait: HeroPortrait = HeroPortraitResource.instantiate()
 	hero_portrait.setup(hero, self, tilemap)
@@ -173,4 +173,4 @@ func remove_hero(hero: Hero) -> void:
 
 
 func _handle_invalid_placement(hero: Hero, tile_position: Vector2i):
-	print("Can't place hero {hero_name} at {tile_pos}".format({"hero_name": hero.name, "tile_pos": tile_position}))
+	print("Can't place hero {hero_name} at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))

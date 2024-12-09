@@ -5,6 +5,7 @@
 
 [node name="GeminiEnemy" type="Node2D"]
 script = ExtResource("1_nl27k")
+unit_name = "Gemini"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 offset_right = 40.0

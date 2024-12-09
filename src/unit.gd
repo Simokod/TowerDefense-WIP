@@ -1,12 +1,13 @@
 class_name Unit
 extends Node2D
 
+@export var unit_name: String
 @export var initiative: float = 25.0 # How quickly unit gets turns
 @export var movement_speed: int = 3 # How many tiles can move per turn
 @export var max_health: int = 100
+@export var allowed_tiles: Array[String]
 
 var id: int
-var allowed_tiles: Array
 var current_health: int
 var sprite_node: Sprite2D
 var texture: CompressedTexture2D:

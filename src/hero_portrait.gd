@@ -35,7 +35,7 @@ func set_to_tile_size():
 func on_press(event: InputEvent):
 	if not event is InputEventMouseButton or not event.pressed:
 		return
-	print("HeroPortrait pressed: ", hero.name)
+	print("HeroPortrait pressed: ", hero.unit_name)
 
 	if is_instance_valid(heroes_selection_ui):
 		heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button)

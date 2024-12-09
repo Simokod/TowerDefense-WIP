@@ -1,6 +1,5 @@
 extends Node2D
 
-const HeroResource = preload("res://src/hero.gd")
 const DebuggerResource = preload("res://src/Debugger/debugger.gd")
 
 var DEBUG_MODE = OS.has_feature("editor")
@@ -10,6 +9,12 @@ var debugger: Debugger
 var ui_layer: CanvasLayer
 
 var heroes_container = Node2D.new()
+
+# Update the HERO_SCENE_PATHS to point to the new hero scenes
+const HERO_SCENE_PATHS = {
+	"Warrior": preload("res://scenes/Heroes/warrior_hero.tscn"),
+	"Ranger": preload("res://scenes/Heroes/ranger_hero.tscn")
+}
 
 func initialize_game():
 	add_child(heroes_container)
@@ -23,24 +28,13 @@ func initialize_game():
 		ui_layer.add_child(debugger)
 
 func get_available_heroes() -> Array[Hero]:
-	# TODO make this not hardcoded.
-	var warrior_hero = HeroResource.new()
-	warrior_hero.id = 1
-	warrior_hero.name = "Warrior"
-	warrior_hero.sprite = preload("res://Images/Heroes/Warrior/Warrior-portrait-removebg-preview.png")
-	warrior_hero.max_health = 100
-	warrior_hero.initiative = 25
-	warrior_hero.allowed_tiles = [Constants.TILE_TYPES.ROAD, Constants.TILE_TYPES.FOREST]
+	var heroes: Array[Hero] = []
 	
-	var ranger_hero = HeroResource.new()
-	ranger_hero.id = 2
-	ranger_hero.name = "Ranger"
-	ranger_hero.sprite = preload("res://Images/Heroes/Ranger/Ranger_portrait_removed_bg.png")
-	ranger_hero.max_health = 80
-	ranger_hero.initiative = 20
-	ranger_hero.allowed_tiles = [Constants.TILE_TYPES.FOREST]
+	for hero_name in HERO_SCENE_PATHS:
+		var hero_instance = HERO_SCENE_PATHS[hero_name].instantiate() as Hero
+		heroes.append(hero_instance)
 	
-	return [warrior_hero, ranger_hero]
+	return heroes
 
 func get_placed_heroes_count():
 	return heroes_container.get_child_count()
@@ -52,7 +46,7 @@ func free_hero_portrait(hero: Hero) -> void:
 	for node in heroes_container.get_children():
 		if node.hero == hero:
 			node.queue_free()
-			print("Hero {hero_name} removed".format({"hero_name": hero.name}))
+			print("Hero {hero_name} removed".format({"hero_name": hero.unit_name}))
 			break
 
 

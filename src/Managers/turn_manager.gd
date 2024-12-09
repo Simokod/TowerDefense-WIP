@@ -54,8 +54,8 @@ func _process(delta: float):
 func _start_unit_turn(turn_unit: ActiveUnit):
 	current_unit = turn_unit
 	turn_started.emit(turn_unit.unit)
-	print("Turn started for {unit_name}".format({"unit_name": turn_unit.unit.name}))
-	AnnouncementSystem.announce_turn_start(turn_unit.unit.name)
+	print("Turn started for {unit_name}".format({"unit_name": turn_unit.unit.unit_name}))
+	AnnouncementSystem.announce_turn_start(turn_unit.unit.unit_name)
 	
 	if turn_unit.unit is BaseEnemy:
 		await _process_enemy_turn(turn_unit)

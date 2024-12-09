@@ -22,7 +22,7 @@ func start_wave(wave_config: WaveConfig):
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
 			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
 
-			AnnouncementSystem.announce_turn_start(enemy.name)
+			AnnouncementSystem.announce_turn_start(enemy.unit_name)
 			await enemy.take_turn()
 			enemy_spawned_and_moved.emit(enemy)
 
