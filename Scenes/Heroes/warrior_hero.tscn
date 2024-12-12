@@ -8,4 +8,4 @@ sprite = ExtResource("2_1hwjc")
 unit_name = "Warrior"
 initiative = 30.0
 max_health = 120
-allowed_tiles = ["road", "forest"]
+allowed_tiles = Array[String](["road", "forest"])

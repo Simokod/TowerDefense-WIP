@@ -48,7 +48,7 @@ func announce_wave_start(wave_number: int) -> void:
 
 func announce_turn_start(unit_name: String) -> void:
 	_set_announcement_position(Position.CUSTOM, 0.9)
-	await _announce("{unit_name} turn".format({"unit_name": unit_name}), 1.5)
+	await _announce("{unit_name} turn".format({"unit_name": unit_name}), 1)
 
 
 func _announce(message: String, duration: float) -> Signal:

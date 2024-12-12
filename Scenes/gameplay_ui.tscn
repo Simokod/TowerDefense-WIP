@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://crnngmipn5b5h"]
 
-[ext_resource type="Script" path="res://src/UI/ui.gd" id="1_dhv53"]
-[ext_resource type="Script" path="res://src/UI/abilities_container.gd" id="2_bo44l"]
-[ext_resource type="Script" path="res://src/UI/end_turn_button.gd" id="2_rtyj3"]
+[ext_resource type="Script" path="res://src/UI/ui.gd" id="1_hohv3"]
+[ext_resource type="Script" path="res://src/UI/abilities_container.gd" id="2_g3joq"]
+[ext_resource type="Script" path="res://src/UI/end_turn_button.gd" id="3_by3gn"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -11,7 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dhv53")
+script = ExtResource("1_hohv3")
 
 [node name="TurnOrderPanel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -39,7 +39,7 @@ offset_left = 20.0
 offset_top = -40.0
 offset_right = -20.0
 offset_bottom = 40.0
-script = ExtResource("2_bo44l")
+script = ExtResource("2_g3joq")
 
 [node name="AbilityButton1" type="Button" parent="AbilitiesContainer"]
 custom_minimum_size = Vector2(120, 80)
@@ -68,4 +68,4 @@ offset_bottom = 40.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "End turn"
-script = ExtResource("2_rtyj3")
+script = ExtResource("3_by3gn")

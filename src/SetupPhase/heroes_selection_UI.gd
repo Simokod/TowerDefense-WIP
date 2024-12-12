@@ -2,18 +2,20 @@ extends Control
 
 class_name HeroesSelectionUI
 
-const HeroPortraitResource = preload("res://Scenes/HeroPortrait.tscn")
 const HoveringHeroResource = preload("res://src/SetupPhase/hovering_hero.gd")
 
 @onready var hero_buttons_container: VBoxContainer = $HeroSelectionContainer
-# @onready var tilemap = GameManager.get_tilemap()
-var tilemap: TileMap = null
+@onready var canvas_layer = get_parent()
 
+var tilemap: TileMap = null
 var hero_locations: Dictionary = {}
 var object_locations: Dictionary = {}
 
-var selected_hero_button: HeroPortrait = null
+var selected_hero_button: BaseHeroButton = null
 var hovering_hero: HoveringHero = null
+
+# Add a dictionary to track setup placed heroes
+var setup_placed_heroes: Dictionary = {} # hero_id -> SetupPlacedHero
 
 func _ready():
 	set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
@@ -32,10 +34,8 @@ func setup(_object_locations: Dictionary = {}):
 
 
 func create_hero_button(hero):
-	var hero_selection_button: HeroPortrait = HeroPortraitResource.instantiate()
-	const is_selection_button = true
-	hero_selection_button.setup(hero, self, tilemap, is_selection_button)
-	
+	var hero_selection_button: SelectionHeroButton = SelectionHeroButton.new()
+	hero_selection_button.setup(hero, self, tilemap)
 	hero_buttons_container.add_child(hero_selection_button)
 
 
@@ -61,7 +61,7 @@ func deselect_hero() -> void:
 	stop_hovering()
 
 
-func on_hero_button_pressed(new_selected_button: HeroPortrait, event: InputEvent, is_selection_button: bool):
+func on_hero_button_pressed(new_selected_button: BaseHeroButton, event: InputEvent, is_selection_button: bool):
 	if event.button_index == MOUSE_BUTTON_RIGHT:
 		_handle_right_press(new_selected_button, is_selection_button)
 		return
@@ -73,12 +73,12 @@ func on_hero_button_pressed(new_selected_button: HeroPortrait, event: InputEvent
 	print("button not left or right, do nothing: ", event.button_index)
 
 
-func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: bool) -> void:
+func _handle_left_press(new_selected_button: BaseHeroButton, is_selection_button: bool) -> void:
 	# Left click on any button while no selected hero - select hero
 	if not is_instance_valid(selected_hero_button):
 		if not is_selection_button:
-			selected_hero_button = new_selected_button.duplicate()
-			selected_hero_button.setup(new_selected_button.hero, self, tilemap, is_selection_button)
+			selected_hero_button = SetupPlacedHero.new()
+			selected_hero_button.setup(new_selected_button.hero, self, tilemap)
 		else:
 			selected_hero_button = new_selected_button
 
@@ -89,7 +89,7 @@ func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: 
 	
 	# Left click on selection button while selected hero - deselect hero
 	if is_selection_button:
-		if selected_hero_button.hero.id == new_selected_button.hero.id:
+		if selected_hero_button.hero.unit_name == new_selected_button.hero.unit_name:
 			deselect_hero()
 			return
 
@@ -100,7 +100,7 @@ func _handle_left_press(new_selected_button: HeroPortrait, is_selection_button: 
 			start_hovering(selected_hero_button.hero)
 
 
-func _handle_right_press(new_selected_button: HeroPortrait, is_selection_button: bool) -> void:
+func _handle_right_press(new_selected_button: BaseHeroButton, is_selection_button: bool) -> void:
 		# Right click on selction button - deselect hero
 		if is_selection_button:
 			deselect_hero()
@@ -154,23 +154,35 @@ func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
 		_handle_invalid_placement(hero, tile_position)
 		return false
 	
-	hero_locations[hero.id] = tile_position
+	hero_locations[hero.unit_name] = tile_position
 	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))
 
-	var hero_portrait: HeroPortrait = HeroPortraitResource.instantiate()
-	hero_portrait.setup(hero, self, tilemap)
-	hero_portrait.set_to_tile_size()
+	var placed_hero: SetupPlacedHero = SetupPlacedHero.new()
+	placed_hero.setup(hero, self, tilemap)
 
 	var tile_center_delta = tilemap.tile_set.tile_size / 2.0
-	hero_portrait.position = tilemap.map_to_local(tile_position) - tile_center_delta
+	placed_hero.position = tilemap.map_to_local(tile_position) - tile_center_delta
 
-	GameManager.add_hero_portrait(hero_portrait)
+	canvas_layer.add_child(placed_hero)
+	setup_placed_heroes[hero.unit_name] = placed_hero
 	return true
 
-func remove_hero(hero: Hero) -> void:
-	hero_locations.erase(hero.id)
-	GameManager.free_hero_portrait(hero)
+func get_placed_heroes_count():
+	return setup_placed_heroes.size()
 
+func remove_hero(hero: Hero) -> void:
+	hero_locations.erase(hero.unit_name)
+	if setup_placed_heroes.has(hero.unit_name):
+		setup_placed_heroes[hero.unit_name].queue_free()
+		setup_placed_heroes.erase(hero.unit_name)
+
+func convert_to_placed_heroes() -> void:
+	for hero_id in setup_placed_heroes.keys():
+		var setup_hero = setup_placed_heroes[hero_id]
+		GameManager.add_placed_hero(setup_hero)
+		setup_hero.queue_free()
+	
+	setup_placed_heroes.clear()
 
 func _handle_invalid_placement(hero: Hero, tile_position: Vector2i):
 	print("Can't place hero {hero_name} at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))

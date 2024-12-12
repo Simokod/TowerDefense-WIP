@@ -6,26 +6,22 @@ var DEBUG_MODE = OS.has_feature("editor")
 var config_manager: ConfigManager
 var turn_manager: TurnManager
 var debugger: Debugger
-var ui_layer: CanvasLayer
+var debug_layer: CanvasLayer
+var placed_heroes = []
 
-var heroes_container = Node2D.new()
-
-# Update the HERO_SCENE_PATHS to point to the new hero scenes
 const HERO_SCENE_PATHS = {
 	"Warrior": preload("res://scenes/Heroes/warrior_hero.tscn"),
 	"Ranger": preload("res://scenes/Heroes/ranger_hero.tscn")
 }
 
 func initialize_game():
-	add_child(heroes_container)
-
 	if DEBUG_MODE:
-		ui_layer = CanvasLayer.new()
-		ui_layer.layer = Layers.DEBUG
-		add_child(ui_layer)
+		debug_layer = CanvasLayer.new()
+		debug_layer.layer = Layers.DEBUG
+		add_child(debug_layer)
 		
 		debugger = DebuggerResource.new()
-		ui_layer.add_child(debugger)
+		debug_layer.add_child(debugger)
 
 func get_available_heroes() -> Array[Hero]:
 	var heroes: Array[Hero] = []
@@ -36,18 +32,16 @@ func get_available_heroes() -> Array[Hero]:
 	
 	return heroes
 
-func get_placed_heroes_count():
-	return heroes_container.get_child_count()
-
-func add_hero_portrait(hero_portrait: HeroPortrait) -> void:
-	heroes_container.add_child(hero_portrait)
-
-func free_hero_portrait(hero: Hero) -> void:
-	for node in heroes_container.get_children():
-		if node.hero == hero:
-			node.queue_free()
-			print("Hero {hero_name} removed".format({"hero_name": hero.unit_name}))
-			break
+func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
+	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	var canvas_layer = get_tree().get_root().get_node("Main").get_node("CanvasLayer")
+	
+	var placed_hero = PlacedHero.new()
+	placed_hero.setup(setup_hero.hero, tilemap)
+	placed_hero.position = setup_hero.position
+	
+	canvas_layer.add_child(placed_hero)
+	placed_heroes.append(placed_hero)
 
 
 func start_gameplay():
@@ -65,7 +59,7 @@ func start_gameplay():
 	var current_level = config_manager.load_level("demo")
 	await wave_manager.initialize_waves(current_level.waves)
 	
-	for hero in heroes_container.get_children():
+	for hero in placed_heroes:
 		turn_manager.register_unit(hero.hero)
 
 

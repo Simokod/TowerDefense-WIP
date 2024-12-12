@@ -7,7 +7,7 @@ enum GamePhase {
 
 
 @export_file("*.tscn") var level_scene_path = "res://scenes/levels/demo_level.tscn"
-const UIScene = preload("res://Scenes/ui.tscn")
+const GameplayUIScene = preload("res://Scenes/gameplay_ui.tscn")
 
 var current_level: Node
 var current_phase: GamePhase = GamePhase.SETUP
@@ -20,6 +20,7 @@ func _ready():
 	
 	heroes_selection_ui.initialize()
 	$CanvasLayer/FinishSetupButton.pressed.connect(_on_finish_setup_pressed)
+	
 
 func load_level(path: String):
 	if current_level:
@@ -28,6 +29,7 @@ func load_level(path: String):
 	add_child(current_level)
 
 func _on_finish_setup_pressed():
+	heroes_selection_ui.convert_to_placed_heroes()
 	heroes_selection_ui.hide()
 	$CanvasLayer/FinishSetupButton.hide()
 	current_phase = GamePhase.GAMEPLAY
@@ -36,7 +38,7 @@ func _on_finish_setup_pressed():
 func start_gameplay():
 	await GameManager.start_gameplay()
 	
-	var ui = UIScene.instantiate()
+	var ui = GameplayUIScene.instantiate()
 	$CanvasLayer.add_child(ui)
 	ui.set_turn_manager(GameManager.turn_manager)
 

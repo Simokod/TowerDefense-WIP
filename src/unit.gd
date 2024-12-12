@@ -7,7 +7,6 @@ extends Node2D
 @export var max_health: int = 100
 @export var allowed_tiles: Array[String]
 
-var id: int
 var current_health: int
 var sprite_node: Sprite2D
 var texture: CompressedTexture2D:

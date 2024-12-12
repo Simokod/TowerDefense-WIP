@@ -1,0 +1,47 @@
+extends TextureButton
+
+class_name BaseHeroButton
+
+var heroes_selection_ui: HeroesSelectionUI
+var hero: Hero
+var is_selected: bool = false
+
+func setup(hero_data: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
+    hero = hero_data
+    heroes_selection_ui = _heroes_selection_ui
+    
+    texture_normal = hero.sprite
+    custom_minimum_size = Vector2(100, 100)
+    stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+    ignore_texture_size = true
+    
+    gui_input.connect(on_press)
+    mouse_entered.connect(_on_mouse_entered)
+    mouse_exited.connect(_on_mouse_exited)
+
+func on_press(event: InputEvent):
+    if not event is InputEventMouseButton or not event.pressed:
+        return
+    print("Hero button pressed: ", hero.unit_name)
+    
+    if is_instance_valid(heroes_selection_ui):
+        heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button())
+    
+    accept_event()
+
+func is_selection_button() -> bool:
+    return false
+
+func select() -> void:
+    is_selected = true
+
+func deselect() -> void:
+    is_selected = false
+    modulate = Color(1, 1, 1)
+
+func _on_mouse_entered() -> void:
+    modulate = Color(1.2, 1.2, 1.2)
+
+func _on_mouse_exited() -> void:
+    if not is_selected:
+        modulate = Color(1, 1, 1)

@@ -1,19 +1,17 @@
 extends Button
 
 var total_heroes_count
-var placed_heroes_count = 0
+var heroes_selection_ui: HeroesSelectionUI
 
 func _ready():
-	total_heroes_count = len(GameManager.get_available_heroes())
+	total_heroes_count = GameManager.get_available_heroes().size()
+	heroes_selection_ui = get_parent().get_node("HeroesSelectionUI")
 
 func _process(_delta):
-	placed_heroes_count = GameManager.get_placed_heroes_count()
+	var placed_heroes_count = heroes_selection_ui.get_placed_heroes_count()
 	text = "Finish setup ({placed_heroes_count}/{total_heroes_count})".format({
 		"placed_heroes_count": placed_heroes_count,
 		"total_heroes_count": total_heroes_count
 	})
 	
-	if placed_heroes_count < total_heroes_count:
-		disabled = true
-	else:
-		disabled = false
+	disabled = placed_heroes_count < total_heroes_count
