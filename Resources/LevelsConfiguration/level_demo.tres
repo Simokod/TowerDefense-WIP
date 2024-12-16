@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="LevelConfig" load_steps=9 format=3 uid="uid://bquf50i3r0i4i"]
+
+[ext_resource type="Script" path="res://src/LevelConfig/level_config.gd" id="1_gch1c"]
+[ext_resource type="Script" path="res://src/LevelConfig/enemy_group_config.gd" id="2_3vt4j"]
+[ext_resource type="Script" path="res://src/LevelConfig/wave_config.gd" id="3_w84uh"]
+
+[sub_resource type="Resource" id="Resource_ndcfj"]
+script = ExtResource("2_3vt4j")
+enemy_type = "gemini_enemy"
+count = 1
+spawn_point_id = 0
+spawn_delay = 0.0
+
+[sub_resource type="Resource" id="Resource_plehq"]
+script = ExtResource("3_w84uh")
+enemy_groups = Array[ExtResource("2_3vt4j")]([SubResource("Resource_ndcfj")])
+
+[sub_resource type="Resource" id="Resource_x4566"]
+script = ExtResource("2_3vt4j")
+enemy_type = "gemini_enemy"
+count = 2
+spawn_point_id = 0
+spawn_delay = 0.0
+
+[sub_resource type="Resource" id="Resource_fno5a"]
+script = ExtResource("2_3vt4j")
+enemy_type = "gemini_enemy"
+count = 2
+spawn_point_id = 1
+spawn_delay = 100.0
+
+[sub_resource type="Resource" id="Resource_o78qi"]
+script = ExtResource("3_w84uh")
+enemy_groups = Array[ExtResource("2_3vt4j")]([SubResource("Resource_x4566"), SubResource("Resource_fno5a")])
+
+[resource]
+script = ExtResource("1_gch1c")
+level_id = 1
+map_scene_path = ""
+spawn_points = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0)])
+waves = Array[ExtResource("3_w84uh")]([SubResource("Resource_plehq"), SubResource("Resource_o78qi")])

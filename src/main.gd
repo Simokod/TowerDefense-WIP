@@ -7,7 +7,7 @@ enum GamePhase {
 
 
 @export_file("*.tscn") var level_scene_path = "res://scenes/levels/demo_level.tscn"
-const GameplayUIScene = preload("res://Scenes/gameplay_ui.tscn")
+const GameplayUIScene = preload("res://Scenes/UI/gameplay_ui.tscn")
 
 var current_level: Node
 var current_phase: GamePhase = GamePhase.SETUP

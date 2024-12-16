@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WarriorBasicAttack" load_steps=3 format=3 uid="uid://b7ar75bn1stm7"]
+
+[ext_resource type="Script" path="res://src/Abilities/Warrior/basic_attack.gd" id="1_imia2"]
+[ext_resource type="Texture2D" uid="uid://b0owk7183c6d0" path="res://Images/Abilities/Warrior/basic_attack.webp" id="1_s1w2q"]
+
+[resource]
+script = ExtResource("1_imia2")
+ability_name = "WarriorBasicAttack"
+description = "Attacks a single enemy, dealing 3 damage."
+icon = ExtResource("1_s1w2q")
+cost = 1
+cast_range = 2
+cooldown_duration = 0
+target_type = 1
+target_team = 2

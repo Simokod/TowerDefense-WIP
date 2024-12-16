@@ -2,7 +2,7 @@ extends Node
 
 class_name ConfigManager
 
-const LEVELS_PATH = "res://src/LevelConfig/LevelsConfiguration/"
+const LEVELS_PATH = "res://resources/LevelsConfiguration/"
 
 var current_level: LevelConfig
 
