@@ -4,8 +4,6 @@ class_name BaseEnemy
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
 var tilemap: TileMap = null
-var tile_center_delta = Vector2(0, 0)
-
 var astar = AStar2D.new()
 var valid_destination_cells: Array[Vector2i] = []
 
@@ -16,19 +14,24 @@ var debug_walbkable_cells = []
 
 func _ready():
 	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
-	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
 
-	var texture_rect = $TextureRect
-	texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	texture_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	texture_rect.custom_minimum_size = tilemap.tile_set.tile_size * 0.9
+	var sprite = $Sprite2D
+	var target_size = tilemap.tile_set.tile_size * 0.9
+	var texture_size = sprite.texture.get_size()
+	
+	# Calculate scale to fit the target size while maintaining aspect ratio
+	var scale_factor = min(
+		target_size.x / texture_size.x,
+		target_size.y / texture_size.y
+	)
+	sprite.scale = Vector2(scale_factor, scale_factor)
+
+	var collision_shape = $TargetingArea/CollisionShape2D
+	var sprite_radius = (target_size.x / 2)
+	collision_shape.shape.radius = sprite_radius * 0.9
 
 func set_tile_position(tile_coords: Vector2i):
-	var tile_center_position = (
-		tilemap.map_to_local(tile_coords) -
-		tile_center_delta
-	)
+	var tile_center_position = tilemap.map_to_local(tile_coords)
 
 	global_position = tile_center_position
 	current_tile_position = tile_coords
@@ -123,7 +126,6 @@ func find_nearest_accessible_tile(target: Vector2i, max_steps: int) -> Vector2i:
 				
 	return best_tile
 
-# New helper function
 func calculate_distances_from_point(point: Vector2i) -> Dictionary:
 	var distances = {}
 	var points_to_process = [get_point_id(point)]
@@ -147,9 +149,8 @@ func get_point_id(point: Vector2i) -> int:
 	var bounds = tilemap.get_used_rect()
 	return point.x + bounds.size.x * point.y
 
-# Offset coordinates for flat-top hexagonal grid
 func get_hex_neighbors(cell: Vector2i) -> Array[Vector2i]:
-	if cell.x % 2 == 0: # Even col
+	if cell.x % 2 == 0:
 		return [
 			Vector2i(cell.x, cell.y - 1), # North
 			Vector2i(cell.x + 1, cell.y - 1), # Northeast
@@ -158,7 +159,7 @@ func get_hex_neighbors(cell: Vector2i) -> Array[Vector2i]:
 			Vector2i(cell.x - 1, cell.y), # Southwest
 			Vector2i(cell.x - 1, cell.y - 1), # Northwest
 		]
-	else: # Odd col
+	else:
 		return [
 			Vector2i(cell.x, cell.y - 1), # North
 			Vector2i(cell.x + 1, cell.y), # Northeast
@@ -183,7 +184,7 @@ func take_turn():
 		steps_taken += 1
 
 func move_to_adjacent_tile(next_tile: Vector2i):
-	var target_position = tilemap.map_to_local(next_tile) - tile_center_delta
+	var target_position = tilemap.map_to_local(next_tile)
 	
 	if move_tween:
 		move_tween.kill()
@@ -197,4 +198,4 @@ func move_to_adjacent_tile(next_tile: Vector2i):
 
 # Virtual method for enemy-specific behavior
 func perform_action():
-	pass # To be overridden by specific enemy types
+	pass

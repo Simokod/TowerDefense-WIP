@@ -1,15 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2tjhs8bj7fof"]
+[gd_scene load_steps=4 format=3 uid="uid://d2tjhs8bj7fof"]
 
 [ext_resource type="Script" path="res://src/Enemies/gemini_enemy.gd" id="1_nl27k"]
 [ext_resource type="Texture2D" uid="uid://dh8663pjyi13m" path="res://Images/Enemies/Enemy_image-removebg-preview.png" id="2_dk57r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bhssw"]
+radius = 16.0312
 
 [node name="GeminiEnemy" type="Node2D"]
 script = ExtResource("1_nl27k")
 unit_name = "Gemini"
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_dk57r")
-expand_mode = 1
-stretch_mode = 5
+
+[node name="TargetingArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetingArea"]
+shape = SubResource("CircleShape2D_bhssw")

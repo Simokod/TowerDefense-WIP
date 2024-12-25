@@ -16,12 +16,9 @@ const HERO_SCENE_PATHS = {
 
 func initialize_game():
 	if DEBUG_MODE:
-		debug_layer = CanvasLayer.new()
-		debug_layer.layer = Layers.DEBUG
-		add_child(debug_layer)
-		
 		debugger = DebuggerResource.new()
-		debug_layer.add_child(debugger)
+		add_child(debugger)
+		debugger.z_index = Layers.DEBUG
 
 func get_available_heroes() -> Array[Hero]:
 	var heroes: Array[Hero] = []
@@ -54,6 +51,10 @@ func start_gameplay():
 
 	var wave_manager = WaveManager.new(enemy_manager)
 	add_child(wave_manager)
+
+	var targeting_system = TargetingSystem.new()
+	add_child(targeting_system)
+	Ability.targeting_system = targeting_system
 
 	config_manager = ConfigManager.new()
 	var current_level = config_manager.load_level("demo")

@@ -6,12 +6,10 @@ signal all_enemies_defeated
 signal enemy_spawned_and_moved(enemy: BaseEnemy)
 
 var active_enemies: Array = []
-var enemy_layer: CanvasLayer
 
 func _ready():
-	enemy_layer = CanvasLayer.new()
-	enemy_layer.layer = Layers.ENEMIES
-	add_child(enemy_layer)
+	# Enable Y-sort on the root node
+	y_sort_enabled = true
 
 func start_wave(wave_config: WaveConfig):
 	for group in wave_config.enemy_groups:
@@ -26,9 +24,6 @@ func start_wave(wave_config: WaveConfig):
 			await enemy.take_turn()
 			enemy_spawned_and_moved.emit(enemy)
 
-			await get_tree().create_timer(1).timeout # TODO Should change waiting mechanism?
-			# if GameManager.is_debug_mode():
-			# 	GameManager.get_debugger().clear_debug_paths()
 			await get_tree().create_timer(0.5).timeout
 
 
@@ -38,7 +33,8 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 		return
 
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
-	enemy_layer.add_child(enemy_instance)
+	add_child(enemy_instance)
+	enemy_instance.z_index = Layers.ENEMIES
 	enemy_instance.set_tile_position(spawn_tile)
 	
 	active_enemies.append(enemy_instance)

@@ -28,9 +28,7 @@ func _process(_delta):
 
 func _on_pressed():
 	print("Ability button pressed")
-	match ability.target_type:
-		Ability.TargetType.NONE:
-			ability.execute(hero)
-		_:
-			pass
-			# GameManager.start_ability_targeting(ability, hero)
+	if not ability.can_use(hero):
+		return
+	
+	ability.trigger(hero)
