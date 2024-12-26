@@ -26,7 +26,7 @@ func _ready():
 	)
 	sprite.scale = Vector2(scale_factor, scale_factor)
 
-	var collision_shape = $TargetingArea/CollisionShape2D
+	var collision_shape = $CollisionShape2D
 	var sprite_radius = (target_size.x / 2)
 	collision_shape.shape.radius = sprite_radius * 0.9
 
