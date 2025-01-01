@@ -37,13 +37,12 @@ func trigger(hero: Hero):
 		print("ERROR: Ability cannot be used")
 		return
 
-	targeting_system.targeting_completed.connect(_on_targeting_completed.bind(hero), CONNECT_ONE_SHOT)
 	targeting_system.start_targeting(self, hero)
 
-func _on_targeting_completed(target, hero: Hero):
-	print("Targeting completed for ", hero.name, " with target ", target)
+func on_targeting_completed(target, hero: Hero):
 	execute(hero, target)
 
+# Virtual method 
 func execute(_hero: Hero, _target = null):
 	pass
 

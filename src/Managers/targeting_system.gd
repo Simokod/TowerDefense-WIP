@@ -6,11 +6,12 @@ signal targeting_cancelled
 var _current_ability: Ability
 var _current_hero: Hero
 var _is_targeting: bool = false
-
 var _current_highlighted_target: Node = null
+
 
 func _ready():
 	set_process_input(false)
+
 
 func start_targeting(ability: Ability, hero: Hero):
 	if _is_targeting:
@@ -33,6 +34,7 @@ func start_targeting(ability: Ability, hero: Hero):
 		Ability.TargetType.GROUND:
 			_start_ground_target_mode()
 
+
 func cancel_targeting():
 	if not _is_targeting:
 		return
@@ -40,12 +42,15 @@ func cancel_targeting():
 	_cleanup_targeting()
 	targeting_cancelled.emit()
 
+
 func complete_targeting(target: Node):
 	if not _is_targeting:
 		return
 
 	targeting_completed.emit(target)
+	_current_ability.on_targeting_completed(target, _current_hero)
 	_cleanup_targeting()
+
 
 func _cleanup_targeting():
 	set_process_input(false)
@@ -53,19 +58,24 @@ func _cleanup_targeting():
 	_current_ability = null
 	_current_hero = null
 
+
 func _start_none_target_mode():
 	complete_targeting(null)
 
 
 func _start_single_target_mode():
+	print("Starting single target mode for ", _current_ability.ability_name, " by ", _current_hero.unit_name)
 	set_process_input(true)
-	set_process(true) # Enable _process for hover updates
+	set_process(true)
+
 
 func _start_multi_target_mode():
 	pass
 
+
 func _start_ground_target_mode():
 	pass
+
 
 func _is_valid_target(target: Node) -> bool:
 	# var target_tile = _get_tile_position(target.global_position)
@@ -73,6 +83,7 @@ func _is_valid_target(target: Node) -> bool:
 	
 	# return target_tile.distance_to(hero_tile) <= _current_ability.range
 	return true
+
 
 func _process(_delta):
 	if not _is_targeting:
@@ -98,6 +109,7 @@ func _input(event: InputEvent):
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			cancel_targeting()
 
+
 func _get_target_under_mouse() -> Node:
 	var mouse_pos = get_viewport().get_mouse_position()
 	var global_mouse_pos = get_viewport().get_canvas_transform().affine_inverse() * mouse_pos
@@ -112,6 +124,7 @@ func _get_target_under_mouse() -> Node:
 	if results.size() > 0:
 		return results[0].collider
 	return null
+
 
 func _highlight_target(target: Node):
 	if _current_highlighted_target and _current_highlighted_target != target:
