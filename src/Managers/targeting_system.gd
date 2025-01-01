@@ -1,7 +1,7 @@
 class_name TargetingSystem extends Node
 
-signal targeting_completed(target)
-signal targeting_cancelled
+signal targeting_completed(ability, target)
+signal targeting_cancelled(ability)
 
 var _current_ability: Ability
 var _current_hero: Hero
@@ -39,15 +39,15 @@ func cancel_targeting():
 	if not _is_targeting:
 		return
 	
+	targeting_cancelled.emit(_current_ability)
 	_cleanup_targeting()
-	targeting_cancelled.emit()
 
 
 func complete_targeting(target: Node):
 	if not _is_targeting:
 		return
 
-	targeting_completed.emit(target)
+	targeting_completed.emit(_current_ability, target)
 	_current_ability.on_targeting_completed(target, _current_hero)
 	_cleanup_targeting()
 
