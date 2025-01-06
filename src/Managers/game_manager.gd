@@ -7,12 +7,12 @@ var config_manager: ConfigManager
 var turn_manager: TurnManager
 var debugger: Debugger
 var debug_layer: CanvasLayer
-var placed_heroes: Array[Hero] = []
-var available_heroes: Array[Hero] = []
+var placed_heroes: Array[BaseHero] = []
+var available_heroes: Array[BaseHero] = []
 
 const HERO_SCENE_PATHS = {
-	"Warrior": preload("res://scenes/Heroes/warrior_hero.tscn"),
-	"Ranger": preload("res://scenes/Heroes/ranger_hero.tscn")
+	"Warrior": preload("res://scenes/Units/Heroes/warrior_hero.tscn"),
+	"Ranger": preload("res://scenes/Units/Heroes/ranger_hero.tscn"),
 }
 
 func initialize_game():
@@ -22,10 +22,12 @@ func initialize_game():
 		debugger.z_index = Layers.DEBUG
 	
 	for hero_name in HERO_SCENE_PATHS:
-		var hero_instance = HERO_SCENE_PATHS[hero_name].instantiate() as Hero
+		var hero_instance: BaseHero = HERO_SCENE_PATHS[hero_name].instantiate() as BaseHero
+		add_child(hero_instance)
+		hero_instance.visible = false
 		available_heroes.append(hero_instance)
 
-func get_available_heroes() -> Array[Hero]:
+func get_available_heroes() -> Array[BaseHero]:
 	return available_heroes
 
 func get_available_heroes_count() -> int:
@@ -35,26 +37,13 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	var main = get_tree().get_root().get_node("Main")
 	
 	var hero_index = available_heroes.find(setup_hero.hero)
-	var hero_instance: Hero = available_heroes[hero_index]
+	var hero_instance: BaseHero = available_heroes[hero_index]
 	available_heroes.remove_at(hero_index)
 	
 	hero_instance.position = setup_hero.position
-	hero_instance.z_index = Layers.HEROES
-		
-	var sprite = Sprite2D.new()
-	sprite.texture = hero_instance.sprite
-	var target_size = main.get_tilemap().tile_set.tile_size * 0.9
-	var texture_size = sprite.texture.get_size()
-
-	var scale_factor = min(
-		target_size.x / texture_size.x,
-		target_size.y / texture_size.y
-	)
-	sprite.scale = Vector2(scale_factor, scale_factor)
-	sprite.centered = false
-	hero_instance.add_child(sprite)
 
 	main.add_child(hero_instance)
+	hero_instance.visible = true
 	placed_heroes.append(hero_instance)
 
 

@@ -1,4 +1,4 @@
-extends Unit
+extends BaseUnit
 
 class_name BaseEnemy
 const MOVEMENT_ANIMATION_DURATION = 0.3
@@ -13,6 +13,8 @@ var debug_draw_cells = []
 var debug_walbkable_cells = []
 
 func _ready():
+	z_index = Layers.ENEMIES
+
 	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
 
 	var sprite = $Sprite2D

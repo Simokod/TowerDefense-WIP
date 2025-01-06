@@ -4,7 +4,7 @@ signal targeting_completed(ability, target)
 signal targeting_cancelled(ability)
 
 var _current_ability: Ability
-var _current_hero: Hero
+var _current_hero: BaseHero
 var _is_targeting: bool = false
 var _current_highlighted_target: Node = null
 
@@ -13,7 +13,7 @@ func _ready():
 	set_process_input(false)
 
 
-func start_targeting(ability: Ability, hero: Hero):
+func start_targeting(ability: Ability, hero: BaseHero):
 	if _is_targeting:
 		cancel_targeting()
 	

@@ -1,7 +1,7 @@
 class_name AbilityButton extends Button
 
 @export var _ability: Ability
-@export var _hero: Hero
+@export var _hero: BaseHero
 
 @onready var cooldown_label = $CooldownLabel
 var is_targeting: bool = false
@@ -15,7 +15,7 @@ func _ready():
 	pressed.connect(_on_pressed)
 	
 
-func setup(ability: Ability, hero: Hero):
+func setup(ability: Ability, hero: BaseHero):
 	_ability = ability
 	_hero = hero
 	icon = _ability.icon

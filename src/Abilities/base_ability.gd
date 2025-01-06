@@ -32,22 +32,22 @@ var current_cooldown: int = 0
 @export var effect_scene: PackedScene # Visual effect when ability is used
 @export var targeting_indicator_scene: PackedScene # Visual for targeting phase
 
-func trigger(hero: Hero):
+func trigger(hero: BaseHero):
 	if not can_use(hero):
 		print("ERROR: Ability cannot be used")
 		return
 
 	targeting_system.start_targeting(self, hero)
 
-func on_targeting_completed(target, hero: Hero):
+func on_targeting_completed(target, hero: BaseHero):
 	execute(hero, target)
 
 # Virtual method 
-func execute(_hero: Hero, _target = null):
+func execute(_hero: BaseHero, _target = null):
 	pass
 
 
-func can_use(_hero: Hero) -> bool:
+func can_use(_hero: BaseHero) -> bool:
 	if current_cooldown > 0:
 		return false
 	# if hero.action_points < cost: 

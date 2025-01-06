@@ -34,7 +34,6 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
 	add_child(enemy_instance)
-	enemy_instance.z_index = Layers.ENEMIES
 	enemy_instance.set_tile_position(spawn_tile)
 	
 	active_enemies.append(enemy_instance)
