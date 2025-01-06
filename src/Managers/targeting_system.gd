@@ -57,7 +57,7 @@ func _cleanup_targeting():
 	_is_targeting = false
 	_current_ability = null
 	_current_hero = null
-
+	_clear_target_highlight()
 
 func _start_none_target_mode():
 	complete_targeting(null)
@@ -105,7 +105,6 @@ func _input(event: InputEvent):
 			var target = _get_target_under_mouse()
 			if target and _is_valid_target(target):
 				complete_targeting(target)
-				_clear_target_highlight()
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			cancel_targeting()
 
