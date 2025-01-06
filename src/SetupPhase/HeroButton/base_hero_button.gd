@@ -6,8 +6,8 @@ var heroes_selection_ui: HeroesSelectionUI
 var hero: Hero
 var is_selected: bool = false
 
-func setup(hero_data: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
-    hero = hero_data
+func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
+    hero = _hero
     heroes_selection_ui = _heroes_selection_ui
     
     texture_normal = hero.sprite

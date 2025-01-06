@@ -24,7 +24,7 @@ func _ready():
 func initialize():
 	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
 	
-	var available_heroes = GameManager.get_available_heroes()
+	var available_heroes: Array[Hero] = GameManager.get_available_heroes()
 	for hero in available_heroes:
 		create_hero_button(hero)
 
@@ -33,7 +33,7 @@ func setup(_object_locations: Dictionary = {}):
 	object_locations = _object_locations
 
 
-func create_hero_button(hero):
+func create_hero_button(hero: Hero):
 	var hero_selection_button: SelectionHeroButton = SelectionHeroButton.new()
 	hero_selection_button.setup(hero, self, tilemap)
 	hero_buttons_container.add_child(hero_selection_button)
