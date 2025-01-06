@@ -29,6 +29,9 @@ func get_available_heroes() -> Array[Hero]:
 	
 	return heroes
 
+func get_available_hero_count() -> int:
+	return HERO_SCENE_PATHS.size()
+	
 func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
 	var canvas_layer = get_tree().get_root().get_node("Main").get_node("CanvasLayer")

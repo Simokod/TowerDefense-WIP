@@ -4,7 +4,7 @@ var total_heroes_count
 var heroes_selection_ui: HeroesSelectionUI
 
 func _ready():
-	total_heroes_count = GameManager.get_available_heroes().size()
+	total_heroes_count = GameManager.get_available_hero_count()
 	heroes_selection_ui = get_parent().get_node("HeroesSelectionUI")
 
 func _process(_delta):
