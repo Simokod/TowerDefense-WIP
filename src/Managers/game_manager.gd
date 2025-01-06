@@ -7,7 +7,8 @@ var config_manager: ConfigManager
 var turn_manager: TurnManager
 var debugger: Debugger
 var debug_layer: CanvasLayer
-var placed_heroes = []
+var placed_heroes: Array[Hero] = []
+var available_heroes: Array[Hero] = []
 
 const HERO_SCENE_PATHS = {
 	"Warrior": preload("res://scenes/Heroes/warrior_hero.tscn"),
@@ -19,29 +20,42 @@ func initialize_game():
 		debugger = DebuggerResource.new()
 		add_child(debugger)
 		debugger.z_index = Layers.DEBUG
-
-func get_available_heroes() -> Array[Hero]:
-	var heroes: Array[Hero] = []
 	
 	for hero_name in HERO_SCENE_PATHS:
 		var hero_instance = HERO_SCENE_PATHS[hero_name].instantiate() as Hero
-		heroes.append(hero_instance)
-	
-	return heroes
+		available_heroes.append(hero_instance)
 
-func get_available_hero_count() -> int:
+func get_available_heroes() -> Array[Hero]:
+	return available_heroes
+
+func get_available_heroes_count() -> int:
 	return HERO_SCENE_PATHS.size()
-	
+
 func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
-	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
-	var canvas_layer = get_tree().get_root().get_node("Main").get_node("CanvasLayer")
+	var main = get_tree().get_root().get_node("Main")
 	
-	var placed_hero = PlacedHero.new()
-	placed_hero.setup(setup_hero.hero, tilemap)
-	placed_hero.position = setup_hero.position
+	var hero_index = available_heroes.find(setup_hero.hero)
+	var hero_instance: Hero = available_heroes[hero_index]
+	available_heroes.remove_at(hero_index)
 	
-	canvas_layer.add_child(placed_hero)
-	placed_heroes.append(placed_hero)
+	hero_instance.position = setup_hero.position
+	hero_instance.z_index = Layers.HEROES
+		
+	var sprite = Sprite2D.new()
+	sprite.texture = hero_instance.sprite
+	var target_size = main.get_tilemap().tile_set.tile_size * 0.9
+	var texture_size = sprite.texture.get_size()
+
+	var scale_factor = min(
+		target_size.x / texture_size.x,
+		target_size.y / texture_size.y
+	)
+	sprite.scale = Vector2(scale_factor, scale_factor)
+	sprite.centered = false
+	hero_instance.add_child(sprite)
+
+	main.add_child(hero_instance)
+	placed_heroes.append(hero_instance)
 
 
 func start_gameplay():
@@ -64,7 +78,7 @@ func start_gameplay():
 	await wave_manager.initialize_waves(current_level.waves)
 	
 	for hero in placed_heroes:
-		turn_manager.register_unit(hero.hero)
+		turn_manager.register_unit(hero)
 
 
 func get_spawn_points() -> Array[Vector2i]:

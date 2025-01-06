@@ -8,21 +8,13 @@ extends Node2D
 @export var allowed_tiles: Array[String]
 
 var current_health: int
-var sprite_node: Sprite2D
-var texture: CompressedTexture2D:
-	set(value):
-		texture = value
-		if sprite_node:
-			sprite_node.texture = value
 
 func _init():
 	allowed_tiles = []
 
 func _ready():
 	current_health = max_health
-	sprite_node = Sprite2D.new()
-	add_child(sprite_node)
-
+	
 func take_damage(amount: int):
 	current_health = max(0, current_health - amount)
 	if current_health == 0:
