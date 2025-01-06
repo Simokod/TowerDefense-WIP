@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://b20lx5gnhvpsb"]
+
+[ext_resource type="PackedScene" uid="uid://dcnqsw5y6v0hb" path="res://Scenes/Units/Enemies/base_enemy.tscn" id="1_1hull"]
+[ext_resource type="Script" path="res://src/Units/Enemies/orange_enemy.gd" id="2_rel1x"]
+[ext_resource type="Texture2D" uid="uid://dh8663pjyi13m" path="res://Images/Enemies/Enemy_image-removebg-preview.png" id="3_t2w0o"]
+
+[node name="BaseUnit" instance=ExtResource("1_1hull")]
+script = ExtResource("2_rel1x")
+unit_name = "OrangeDude"
+
+[node name="Sprite2D" parent="Area2D" index="0"]
+texture = ExtResource("3_t2w0o")

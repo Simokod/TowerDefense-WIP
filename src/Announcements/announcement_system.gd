@@ -2,7 +2,7 @@ extends CanvasLayer
 
 signal finished
 
-enum Position {
+enum AnnouncementPosition {
 	TOP,
 	TOP_LEFT,
 	TOP_RIGHT,
@@ -18,36 +18,36 @@ func _ready():
 	hide()
 
 
-func _set_announcement_position(announcement_position: Position, custom_anchor_y: float = 0.5):
+func _set_announcement_position(announcement_position: AnnouncementPosition, custom_anchor_y: float = 0.5):
 	match announcement_position:
-		Position.CUSTOM:
+		AnnouncementPosition.CUSTOM:
 			$PanelContainer.set_anchor(SIDE_LEFT, 0.5, true)
 			$PanelContainer.set_anchor(SIDE_RIGHT, 0.5, true)
 			$PanelContainer.set_anchor(SIDE_TOP, custom_anchor_y, true)
 			$PanelContainer.set_anchor(SIDE_BOTTOM, custom_anchor_y, true)
-		Position.CENTER:
+		AnnouncementPosition.CENTER:
 			$PanelContainer.set_anchors_preset(Control.PRESET_CENTER, true)
-		Position.TOP:
+		AnnouncementPosition.TOP:
 			$PanelContainer.set_anchors_preset(Control.PRESET_CENTER_TOP, true)
-		Position.TOP_LEFT:
+		AnnouncementPosition.TOP_LEFT:
 			$PanelContainer.set_anchors_preset(Control.PRESET_TOP_LEFT, true)
-		Position.TOP_RIGHT:
+		AnnouncementPosition.TOP_RIGHT:
 			$PanelContainer.set_anchors_preset(Control.PRESET_TOP_RIGHT, true)
-		Position.BOTTOM:
+		AnnouncementPosition.BOTTOM:
 			$PanelContainer.set_anchors_preset(Control.PRESET_CENTER_BOTTOM, true)
-		Position.BOTTOM_LEFT:
+		AnnouncementPosition.BOTTOM_LEFT:
 			$PanelContainer.set_anchors_preset(Control.PRESET_BOTTOM_LEFT, true)
-		Position.BOTTOM_RIGHT:
+		AnnouncementPosition.BOTTOM_RIGHT:
 			$PanelContainer.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT, true)
 	
 
 func announce_wave_start(wave_number: int) -> void:
-	_set_announcement_position(Position.CUSTOM, 0.9)
+	_set_announcement_position(AnnouncementPosition.CUSTOM, 0.9)
 	await _announce("Wave {number}".format({"number": wave_number}), 1.5)
 
 
 func announce_turn_start(unit_name: String) -> void:
-	_set_announcement_position(Position.CUSTOM, 0.9)
+	_set_announcement_position(AnnouncementPosition.CUSTOM, 0.9)
 	await _announce("{unit_name} turn".format({"unit_name": unit_name}), 1)
 
 

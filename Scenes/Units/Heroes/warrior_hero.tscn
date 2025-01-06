@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8htmocibv4qk"]
+
+[ext_resource type="PackedScene" uid="uid://dwqm1wbx8hcjo" path="res://Scenes/Units/Heroes/base_hero.tscn" id="1_ps588"]
+[ext_resource type="Texture2D" uid="uid://dqev6osybvrpr" path="res://Images/Heroes/Warrior/Warrior-portrait-removebg-preview.png" id="2_dkx7o"]
+
+[node name="Warrior" instance=ExtResource("1_ps588")]
+unit_name = "Warrior"
+allowed_tiles = Array[String](["road", "forest"])
+
+[node name="Sprite2D" parent="Area2D" index="0"]
+texture = ExtResource("2_dkx7o")

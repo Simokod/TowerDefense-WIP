@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_ndcfj"]
 script = ExtResource("2_3vt4j")
-enemy_type = "gemini_enemy"
+enemy_type = "orange_enemy"
 count = 1
 spawn_point_id = 0
 spawn_delay = 0.0

@@ -1,17 +1,12 @@
 extends Node
 
-# Dictionary to track what entity is on each tile
-# Key: Vector2i (tile position)
-# Value: Entity (enemy, hero, object, etc.)
 var occupied_tiles: Dictionary = {}
 
 func register_entity_position(entity, tile_pos: Vector2i):
-	# Remove entity from its old position if it exists
 	for pos in occupied_tiles.keys():
 		if occupied_tiles[pos] == entity:
 			occupied_tiles.erase(pos)
 	
-	# Register new position
 	occupied_tiles[tile_pos] = entity
 
 func unregister_entity(entity):

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmj1q4pskuo3u"]
+
+[ext_resource type="PackedScene" uid="uid://dwqm1wbx8hcjo" path="res://Scenes/Units/Heroes/base_hero.tscn" id="1_hop6g"]
+[ext_resource type="Texture2D" uid="uid://wq5w044woml2" path="res://Images/Heroes/Ranger/Ranger_portrait_removed_bg.png" id="2_eq44t"]
+
+[node name="Ranger" instance=ExtResource("1_hop6g")]
+unit_name = "Ranger"
+allowed_tiles = Array[String](["forest"])
+
+[node name="Sprite2D" parent="Area2D" index="0"]
+texture = ExtResource("2_eq44t")

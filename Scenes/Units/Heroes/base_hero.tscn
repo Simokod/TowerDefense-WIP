@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwqm1wbx8hcjo"]
+
+[ext_resource type="PackedScene" uid="uid://bly8u5huo02rn" path="res://Scenes/Units/base_unit.tscn" id="1_siejb"]
+[ext_resource type="Script" path="res://src/Units/Heroes/base_hero.gd" id="2_c3mtq"]
+
+[node name="BaseUnit" instance=ExtResource("1_siejb")]
+script = ExtResource("2_c3mtq")

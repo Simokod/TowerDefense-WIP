@@ -3,45 +3,48 @@ extends TextureButton
 class_name BaseHeroButton
 
 var heroes_selection_ui: HeroesSelectionUI
-var hero: Hero
+var hero: BaseHero
 var is_selected: bool = false
 
-func setup(hero_data: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
-    hero = hero_data
-    heroes_selection_ui = _heroes_selection_ui
-    
-    texture_normal = hero.sprite
-    custom_minimum_size = Vector2(100, 100)
-    stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-    ignore_texture_size = true
-    
-    gui_input.connect(on_press)
-    mouse_entered.connect(_on_mouse_entered)
-    mouse_exited.connect(_on_mouse_exited)
+func setup(hero_data: BaseHero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
+	hero = hero_data
+	heroes_selection_ui = _heroes_selection_ui
+	
+	# TODO: The problem is that the sprite is not initialized yet, because the hero is not added to the scene tree.
+	# Im not sure even if the hero should be added to the scene tree, as it wasn't before.
+	# Because it aint added to the scene, the _ready() function is not called, and the sprite is not initialized.
+	texture_normal = hero.sprite.texture
+	custom_minimum_size = Vector2(100, 100)
+	stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+	ignore_texture_size = true
+	
+	gui_input.connect(on_press)
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
 
 func on_press(event: InputEvent):
-    if not event is InputEventMouseButton or not event.pressed:
-        return
-    print("Hero button pressed: ", hero.unit_name)
-    
-    if is_instance_valid(heroes_selection_ui):
-        heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button())
-    
-    accept_event()
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+	print("BaseHero button pressed: ", hero.unit_name)
+	
+	if is_instance_valid(heroes_selection_ui):
+		heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button())
+	
+	accept_event()
 
 func is_selection_button() -> bool:
-    return false
+	return false
 
 func select() -> void:
-    is_selected = true
+	is_selected = true
 
 func deselect() -> void:
-    is_selected = false
-    modulate = Color(1, 1, 1)
+	is_selected = false
+	modulate = Color(1, 1, 1)
 
 func _on_mouse_entered() -> void:
-    modulate = Color(1.2, 1.2, 1.2)
+	modulate = Color(1.2, 1.2, 1.2)
 
 func _on_mouse_exited() -> void:
-    if not is_selected:
-        modulate = Color(1, 1, 1)
+	if not is_selected:
+		modulate = Color(1, 1, 1)

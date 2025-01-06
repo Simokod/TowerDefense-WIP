@@ -1,40 +1,23 @@
-extends Unit
+extends BaseUnit
 
 class_name BaseEnemy
+
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
-var tilemap: TileMap = null
 var astar = AStar2D.new()
 var valid_destination_cells: Array[Vector2i] = []
 
 var move_tween: Tween
-var current_tile_position
+var tile_position: Vector2i
 var debug_draw_cells = []
 var debug_walbkable_cells = []
 
-func _ready():
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
-
-	var sprite = $Sprite2D
-	var target_size = tilemap.tile_set.tile_size * 0.9
-	var texture_size = sprite.texture.get_size()
-	
-	# Calculate scale to fit the target size while maintaining aspect ratio
-	var scale_factor = min(
-		target_size.x / texture_size.x,
-		target_size.y / texture_size.y
-	)
-	sprite.scale = Vector2(scale_factor, scale_factor)
-
-	var collision_shape = $CollisionShape2D
-	var sprite_radius = (target_size.x / 2)
-	collision_shape.shape.radius = sprite_radius * 0.9
 
 func set_tile_position(tile_coords: Vector2i):
 	var tile_center_position = tilemap.map_to_local(tile_coords)
 
 	global_position = tile_center_position
-	current_tile_position = tile_coords
+	tile_position = tile_coords
 	print("Initiallized enemy, global_pos: {global_pos}, tile: {tile}".format({"global_pos": global_position, "tile": tile_coords}))
 
 
@@ -72,27 +55,27 @@ func calculate_path() -> Array:
 	
 	var target_pos = find_nearest_target()
 	
-	var full_path_ids: PackedVector2Array = astar.get_point_path(get_point_id(current_tile_position), get_point_id(target_pos))
+	var full_path_ids: PackedVector2Array = astar.get_point_path(get_point_id(tile_position), get_point_id(target_pos))
 	var full_path = Array(full_path_ids).map(func(point): return Vector2i(point.x, point.y))
 
-	if full_path.size() > 0 and full_path.front() == current_tile_position:
+	if full_path.size() > 0 and full_path.front() == tile_position:
 		full_path.pop_front()
 
 	# Get the position we'd reach this turn
 	var steps_possible = min(movement_speed, full_path.size())
-	var turn_end_pos = full_path[steps_possible - 1] if steps_possible > 0 else current_tile_position
+	var turn_end_pos = full_path[steps_possible - 1] if steps_possible > 0 else tile_position
 		
 	# If the end position for this turn would be occupied, find a new path
 	if TileOccupancyManager.is_tile_occupied_by_enemy(turn_end_pos, self):
 		# Find nearest unoccupied tile that's within our movement range
 		var alternative_end = find_nearest_accessible_tile(target_pos, steps_possible)
-		if alternative_end != current_tile_position:
+		if alternative_end != tile_position:
 			full_path_ids = astar.get_point_path(
-				get_point_id(current_tile_position),
+				get_point_id(tile_position),
 				get_point_id(alternative_end)
 			)
 			full_path = Array(full_path_ids).map(func(point): return Vector2i(point.x, point.y))
-			if full_path.size() > 0 and full_path.front() == current_tile_position:
+			if full_path.size() > 0 and full_path.front() == tile_position:
 				full_path.pop_front()
 	
 	for cell in full_path:
@@ -105,11 +88,11 @@ func calculate_path() -> Array:
 
 
 func find_nearest_accessible_tile(target: Vector2i, max_steps: int) -> Vector2i:
-	var distances_from_start = calculate_distances_from_point(current_tile_position)
+	var distances_from_start = calculate_distances_from_point(tile_position)
 	var distances_to_target = calculate_distances_from_point(target)
 	
 	var nearest_distance = INF
-	var best_tile = current_tile_position
+	var best_tile = tile_position
 	var best_steps_used = 0 # Track how many steps the best option uses
 
 	for cell in valid_destination_cells:
@@ -193,9 +176,8 @@ func move_to_adjacent_tile(next_tile: Vector2i):
 	move_tween.tween_property(self, "position", target_position, MOVEMENT_ANIMATION_DURATION)
 	await move_tween.finished
 	
-	current_tile_position = next_tile
-	TileOccupancyManager.register_entity_position(self, current_tile_position)
+	tile_position = next_tile
+	TileOccupancyManager.register_entity_position(self, tile_position)
 
-# Virtual method for enemy-specific behavior
 func perform_action():
 	pass

@@ -5,11 +5,11 @@ class_name HoveringHero
 var tilemap: TileMap = null
 var heroes_selection_ui: HeroesSelectionUI
 
-var hero: Hero = null
+var hero: BaseHero = null
 var hero_sprite: TextureRect = null
 var tile_center_delta: Vector2 = Vector2()
 
-func setup(seleced_hero: Hero, _heroes_selection_ui: HeroesSelectionUI) -> void:
+func setup(seleced_hero: BaseHero, _heroes_selection_ui: HeroesSelectionUI) -> void:
 	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
 
 	hero = seleced_hero
@@ -21,8 +21,8 @@ func setup(seleced_hero: Hero, _heroes_selection_ui: HeroesSelectionUI) -> void:
 	hero_sprite = texture_rect
 	add_child(texture_rect)
 	
-	hero_sprite.texture = hero.sprite
-	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x / 2.0, tilemap.tile_set.tile_size.y / 2.0)
+	hero_sprite.texture = hero.sprite.texture
+	tile_center_delta = Vector2(tilemap.tile_set.tile_size.x, tilemap.tile_set.tile_size.y) / 2
 
 	heroes_selection_ui = _heroes_selection_ui
 

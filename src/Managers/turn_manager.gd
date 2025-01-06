@@ -1,17 +1,17 @@
 class_name TurnManager
 extends Node
 
-signal turn_started(unit: Unit)
-signal turn_ended(unit: Unit)
+signal turn_started(unit: BaseUnit)
+signal turn_ended(unit: BaseUnit)
 signal turn_order_changed(new_order: Array[Dictionary])
 
 const INITIATIVE_MAX = 100.0
 
 class ActiveUnit:
-	var unit: Unit
+	var unit: BaseUnit
 	var initiative: float = 0.0
 	
-	func _init(unit_ref: Unit):
+	func _init(unit_ref: BaseUnit):
 		unit = unit_ref
 	
 	func accumulate_initiative(delta: float) -> bool:
@@ -28,12 +28,12 @@ var turn_units: Array[ActiveUnit] = []
 var current_unit: ActiveUnit
 var is_paused: bool = false
 
-func register_unit(unit: Unit):
+func register_unit(unit: BaseUnit):
 	var turn_unit = ActiveUnit.new(unit)
 	turn_units.append(turn_unit)
 	_update_turn_order()
 
-func unregister_unit(unit: Unit):
+func unregister_unit(unit: BaseUnit):
 	for i in turn_units.size():
 		if turn_units[i].unit == unit:
 			turn_units.remove_at(i)

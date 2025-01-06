@@ -10,8 +10,8 @@ var debug_layer: CanvasLayer
 var placed_heroes = []
 
 const HERO_SCENE_PATHS = {
-	"Warrior": preload("res://scenes/Heroes/warrior_hero.tscn"),
-	"Ranger": preload("res://scenes/Heroes/ranger_hero.tscn")
+	"Warrior": preload("res://scenes/units/Heroes/warrior_hero.tscn"),
+	"Ranger": preload("res://scenes/units/Heroes/ranger_hero.tscn")
 }
 
 func initialize_game():
@@ -20,11 +20,11 @@ func initialize_game():
 		add_child(debugger)
 		debugger.z_index = Layers.DEBUG
 
-func get_available_heroes() -> Array[Hero]:
-	var heroes: Array[Hero] = []
+func get_available_heroes() -> Array[BaseHero]:
+	var heroes: Array[BaseHero] = []
 	
 	for hero_name in HERO_SCENE_PATHS:
-		var hero_instance = HERO_SCENE_PATHS[hero_name].instantiate() as Hero
+		var hero_instance = HERO_SCENE_PATHS[hero_name].instantiate() as BaseHero
 		heroes.append(hero_instance)
 	
 	return heroes
@@ -36,6 +36,8 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	var placed_hero = PlacedHero.new()
 	placed_hero.setup(setup_hero.hero, tilemap)
 	placed_hero.position = setup_hero.position
+	placed_hero.hero.position = setup_hero.position
+	print("placed hero position: ", placed_hero.position)
 	
 	canvas_layer.add_child(placed_hero)
 	placed_heroes.append(placed_hero)

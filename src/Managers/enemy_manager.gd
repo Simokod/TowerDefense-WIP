@@ -18,7 +18,7 @@ func start_wave(wave_config: WaveConfig):
 			print("Spawning enemy {i} of {count}".format({"i": i + 1, "count": group.count}))
 			var enemy_scene: PackedScene = Constants.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
-			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
+			var enemy: BaseUnit = spawn_enemy(enemy_scene, spawn_tile)
 
 			AnnouncementSystem.announce_turn_start(enemy.unit_name)
 			await enemy.take_turn()
@@ -27,12 +27,12 @@ func start_wave(wave_config: WaveConfig):
 			await get_tree().create_timer(0.5).timeout
 
 
-func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
+func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseUnit:
 	if not enemy_scene:
 		push_error("Enemy scene not set in EnemyManager")
 		return
 
-	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
+	var enemy_instance: BaseUnit = enemy_scene.instantiate()
 	add_child(enemy_instance)
 	enemy_instance.z_index = Layers.ENEMIES
 	enemy_instance.set_tile_position(spawn_tile)
