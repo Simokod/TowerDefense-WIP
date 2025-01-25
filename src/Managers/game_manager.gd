@@ -40,7 +40,13 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	var hero_instance: BaseHero = available_heroes[hero_index]
 	available_heroes.remove_at(hero_index)
 	
-	hero_instance.position = setup_hero.position
+	# TODO: This seems like they only way I could fix the position. 
+	# I think this is because both the hovering hero and the placed hero button are textures, 
+	# while the heroes use sprites. This causes the positioning to be different.
+	# TODO: This stills isnt perfect, as once the setup is finished, you see the texture turning to sprite moving a little.
+	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	hero_instance.position = setup_hero.position + Vector2(tilemap.tile_set.tile_size / 2)
+
 
 	main.add_child(hero_instance)
 	hero_instance.visible = true

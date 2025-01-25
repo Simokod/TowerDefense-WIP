@@ -20,7 +20,6 @@ var setup_placed_heroes: Dictionary = {} # hero_id -> SetupPlacedHero
 func _ready():
 	set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 
-# New initialization method to be called after level is loaded
 func initialize():
 	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
 	
@@ -160,7 +159,8 @@ func place_hero(hero: BaseHero, tile_position: Vector2i) -> bool:
 	var placed_hero: SetupPlacedHero = SetupPlacedHero.new()
 	placed_hero.setup(hero, self, tilemap)
 
-	placed_hero.position = tilemap.map_to_local(tile_position)
+	var tile_size_delta = tilemap.tile_set.tile_size / 2
+	placed_hero.position = tilemap.map_to_local(tile_position) - Vector2(tile_size_delta)
 
 	canvas_layer.add_child(placed_hero)
 	setup_placed_heroes[hero.unit_name] = placed_hero
