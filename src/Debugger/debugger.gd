@@ -8,7 +8,7 @@ var debug_walkable_cells = []
 var tilemap: TileMap
 
 func _ready():
-    tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+    tilemap = GameManager.get_tilemap()
 
 func debug_path(_debug_draw_cells: Array, _debug_walkable_cells: Array):
     debug_draw_cells = _debug_draw_cells

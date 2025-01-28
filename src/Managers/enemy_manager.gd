@@ -16,7 +16,7 @@ func start_wave(wave_config: WaveConfig):
 		print("Spawning group {group} of {count}".format({"group": group, "count": wave_config.enemy_groups.size()}))
 		for i in range(group.count):
 			print("Spawning enemy {i} of {count}".format({"i": i + 1, "count": group.count}))
-			var enemy_scene: PackedScene = Constants.ENEMY_SCENES[group.enemy_type]
+			var enemy_scene: PackedScene = Enemies.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
 			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
 
@@ -34,7 +34,6 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
 	add_child(enemy_instance)
-	enemy_instance.z_index = Layers.ENEMIES
 	enemy_instance.set_tile_position(spawn_tile)
 	
 	active_enemies.append(enemy_instance)

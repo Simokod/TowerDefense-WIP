@@ -1,8 +1,6 @@
-extends BaseHeroButton
+class_name SetupPlacedHero extends BaseHeroButton
 
-class_name SetupPlacedHero
-
-func setup(hero_data: Hero, _heroes_selection_ui: HeroesSelectionUI, tilemap: TileMap) -> void:
+func setup(hero_data: BaseHero, _heroes_selection_ui: HeroesSelectionUI, tilemap: TileMap) -> void:
 	super.setup(hero_data, _heroes_selection_ui, tilemap)
 	custom_minimum_size = tilemap.tile_set.tile_size * 0.9
 

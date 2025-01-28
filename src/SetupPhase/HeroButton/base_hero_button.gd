@@ -1,20 +1,18 @@
-extends TextureButton
-
-class_name BaseHeroButton
+class_name BaseHeroButton extends TextureButton
 
 var heroes_selection_ui: HeroesSelectionUI
-var hero: Hero
+var hero: BaseHero
 var is_selected: bool = false
 
-func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
+func setup(_hero: BaseHero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
 	hero = _hero
 	heroes_selection_ui = _heroes_selection_ui
-	
-	texture_normal = hero.sprite
+
+	texture_normal = hero.unit_sprite
 	custom_minimum_size = Vector2(100, 100)
 	stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 	ignore_texture_size = true
-	
+
 	gui_input.connect(on_press)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -22,7 +20,7 @@ func setup(_hero: Hero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileM
 func on_press(event: InputEvent):
 	if not event is InputEventMouseButton or not event.pressed:
 		return
-	print("Hero button pressed: ", hero.unit_name)
+	print("BaseHero button pressed: ", hero.unit_name)
 	
 	if is_instance_valid(heroes_selection_ui):
 		heroes_selection_ui.on_hero_button_pressed(self, event, is_selection_button())

@@ -20,11 +20,10 @@ var setup_placed_heroes: Dictionary = {} # hero_id -> SetupPlacedHero
 func _ready():
 	set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 
-# New initialization method to be called after level is loaded
 func initialize():
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	tilemap = GameManager.get_tilemap()
 	
-	var available_heroes: Array[Hero] = GameManager.get_available_heroes()
+	var available_heroes: Array[BaseHero] = GameManager.get_available_heroes()
 	for hero in available_heroes:
 		create_hero_button(hero)
 
@@ -33,13 +32,13 @@ func setup(_object_locations: Dictionary = {}):
 	object_locations = _object_locations
 
 
-func create_hero_button(hero: Hero):
+func create_hero_button(hero: BaseHero):
 	var hero_selection_button: SelectionHeroButton = SelectionHeroButton.new()
 	hero_selection_button.setup(hero, self, tilemap)
 	hero_buttons_container.add_child(hero_selection_button)
 
 
-func start_hovering(hero: Hero) -> void:
+func start_hovering(hero: BaseHero) -> void:
 	if hovering_hero == null:
 		hovering_hero = HoveringHeroResource.new()
 		add_child(hovering_hero)
@@ -126,7 +125,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			if successfully_placed_hero:
 				deselect_hero()
 
-func is_valid_hero_placement_position(selected_hero: Hero, tile_pos: Vector2i, debug = false) -> bool:
+func is_valid_hero_placement_position(selected_hero: BaseHero, tile_pos: Vector2i, debug = false) -> bool:
 	var is_allowed_tile = _is_allowed_tile(selected_hero, tile_pos)
 	var is_empty_tile = _is_empty_tile(tile_pos)
 	
@@ -136,7 +135,7 @@ func is_valid_hero_placement_position(selected_hero: Hero, tile_pos: Vector2i, d
 
 	return is_allowed_tile and is_empty_tile
 
-func _is_allowed_tile(hero: Hero, tile_pos: Vector2i) -> bool:
+func _is_allowed_tile(hero: BaseHero, tile_pos: Vector2i) -> bool:
 	var chosen_tile = tilemap.get_cell_tile_data(0, tile_pos)
 	if not chosen_tile: return false
 
@@ -148,20 +147,20 @@ func _is_empty_tile(tile_pos: Vector2i) -> bool:
 	return tile_pos not in hero_locations.values() and tile_pos not in object_locations.values()
 
 
-func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
+func place_hero(hero: BaseHero, tile_position: Vector2i) -> bool:
 	var is_valid_pos = is_valid_hero_placement_position(hero, tile_position, true)
 	if not is_valid_pos:
 		_handle_invalid_placement(hero, tile_position)
 		return false
 	
 	hero_locations[hero.unit_name] = tile_position
-	print("Hero {hero_name} placed at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))
+	print("BaseHero {hero_name} placed at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))
 
 	var placed_hero: SetupPlacedHero = SetupPlacedHero.new()
 	placed_hero.setup(hero, self, tilemap)
 
-	var tile_center_delta = tilemap.tile_set.tile_size / 2.0
-	placed_hero.position = tilemap.map_to_local(tile_position) - tile_center_delta
+	var tile_size_delta = tilemap.tile_set.tile_size / 2
+	placed_hero.position = tilemap.map_to_local(tile_position) - Vector2(tile_size_delta)
 
 	canvas_layer.add_child(placed_hero)
 	setup_placed_heroes[hero.unit_name] = placed_hero
@@ -170,7 +169,7 @@ func place_hero(hero: Hero, tile_position: Vector2i) -> bool:
 func get_placed_heroes_count():
 	return setup_placed_heroes.size()
 
-func remove_hero(hero: Hero) -> void:
+func remove_hero(hero: BaseHero) -> void:
 	hero_locations.erase(hero.unit_name)
 	if setup_placed_heroes.has(hero.unit_name):
 		setup_placed_heroes[hero.unit_name].queue_free()
@@ -184,5 +183,5 @@ func convert_to_placed_heroes() -> void:
 	
 	setup_placed_heroes.clear()
 
-func _handle_invalid_placement(hero: Hero, tile_position: Vector2i):
+func _handle_invalid_placement(hero: BaseHero, tile_position: Vector2i):
 	print("Can't place hero {hero_name} at {tile_pos}".format({"hero_name": hero.unit_name, "tile_pos": tile_position}))

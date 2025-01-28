@@ -1,4 +1,4 @@
-extends Unit
+extends BaseUnit
 
 class_name BaseEnemy
 const MOVEMENT_ANIMATION_DURATION = 0.3
@@ -13,7 +13,9 @@ var debug_draw_cells = []
 var debug_walbkable_cells = []
 
 func _ready():
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	z_index = Layers.ENEMIES
+
+	tilemap = GameManager.get_tilemap()
 
 	var sprite = $Sprite2D
 	var target_size = tilemap.tile_set.tile_size * 0.9
@@ -143,7 +145,7 @@ func calculate_distances_from_point(point: Vector2i) -> Dictionary:
 	return distances
 
 func is_walkable_tile(tile_data: TileData) -> bool:
-	return tile_data.get_custom_data("tile_type") == Constants.TILE_TYPES.ROAD
+	return tile_data.get_custom_data("tile_type") == Tiles.TILE_TYPES["ROAD"]
 
 func get_point_id(point: Vector2i) -> int:
 	var bounds = tilemap.get_used_rect()
