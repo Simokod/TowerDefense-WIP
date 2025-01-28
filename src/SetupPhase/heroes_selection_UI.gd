@@ -161,7 +161,7 @@ func place_hero(hero: BaseHero, tile_position: Vector2i) -> bool:
 
 	var tile_size_delta = tilemap.tile_set.tile_size / 2
 	placed_hero.position = tilemap.map_to_local(tile_position) - Vector2(tile_size_delta)
-
+	placed_hero.tile_pos = tile_position
 	canvas_layer.add_child(placed_hero)
 	setup_placed_heroes[hero.unit_name] = placed_hero
 	return true

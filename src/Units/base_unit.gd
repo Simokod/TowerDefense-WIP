@@ -8,6 +8,7 @@ class_name BaseUnit extends Node2D
 
 var current_health: int
 var unit_sprite: Texture2D
+var tile_pos: Vector2i
 
 func _ready():
 	current_health = max_health

@@ -46,7 +46,7 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	# TODO: This stills isnt perfect, as once the setup is finished, you see the texture turning to sprite moving a little.
 	var tilemap = get_tilemap()
 	hero_instance.position = setup_hero.position + Vector2(tilemap.tile_set.tile_size / 2)
-
+	hero_instance.tile_pos = setup_hero.tile_pos
 
 	main.add_child(hero_instance)
 	hero_instance.visible = true

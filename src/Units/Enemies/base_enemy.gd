@@ -1,6 +1,4 @@
-extends BaseUnit
-
-class_name BaseEnemy
+class_name BaseEnemy extends BaseUnit
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
 var tilemap: TileMap = null
@@ -196,6 +194,7 @@ func move_to_adjacent_tile(next_tile: Vector2i):
 	await move_tween.finished
 	
 	current_tile_position = next_tile
+	tile_pos = current_tile_position
 	TileOccupancyManager.register_entity_position(self, current_tile_position)
 
 # Virtual method for enemy-specific behavior

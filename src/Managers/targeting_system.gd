@@ -77,32 +77,55 @@ func _start_ground_target_mode():
 	pass
 
 
+func _calc_hex_distance(from: Vector2i, to: Vector2i) -> int:
+	# Convert from offset coordinates to cube coordinates
+	var from_x = from.x
+	var from_z = from.y - (from.x - (from.x & 1)) / 2
+	var from_y = -from_x - from_z
+	
+	var to_x = to.x
+	var to_z = to.y - (to.x - (to.x & 1)) / 2
+	var to_y = -to_x - to_z
+	
+	# Calculate the distance using cube coordinates
+	var distance = (abs(from_x - to_x) + abs(from_y - to_y) + abs(from_z - to_z)) / 2
+	
+	return int(distance)
+
+
 func _is_valid_target(target: Node) -> bool:
-	# TODO: Check if the target is in range
+	# TODO: Also need to check range for non-unit targets, implement when implementing ground targeting
+	if target is BaseUnit:
+		if not _is_target_in_range(target):
+			return false
 
 	if _current_ability.self_target and target == _current_hero:
-		print("target is self")
 		return true
 	
 	if ((_current_ability.target_team == Ability.TargetTeam.ENEMY or
 			_current_ability.target_team == Ability.TargetTeam.ALL) and
 			target is BaseEnemy):
-		print("target is enemy")
 		return true
 	
 	if ((_current_ability.target_team == Ability.TargetTeam.FRIENDLY or
 			_current_ability.target_team == Ability.TargetTeam.ALL) and
 			target is BaseHero):
-		print("target is friendly")
 		return true
 	
-	print("target is not valid")
 	return false
+
+func _is_target_in_range(target: Node) -> bool:
+	if target is BaseUnit:
+		var distance = _calc_hex_distance(_current_hero.tile_pos, target.tile_pos)
+		if distance > _current_ability.cast_range:
+			return false
+	return true
 	
 
 func _process(_delta):
 	if not _is_targeting:
 		return
+	
 		
 	var hovered_entity = _get_target_under_mouse()
 	if hovered_entity and _is_valid_target(hovered_entity):
@@ -144,7 +167,6 @@ func _highlight_target(target: Node):
 	if _current_highlighted_target and _current_highlighted_target != target:
 			_clear_target_highlight()
 	
-	# Don't highlight again if already highlighted
 	if _current_highlighted_target == target:
 			return
 	
