@@ -145,7 +145,7 @@ func calculate_distances_from_point(point: Vector2i) -> Dictionary:
 	return distances
 
 func is_walkable_tile(tile_data: TileData) -> bool:
-	return tile_data.get_custom_data("tile_type") == Constants.TILE_TYPES.ROAD
+	return tile_data.get_custom_data("tile_type") == Tiles.TILE_TYPES["ROAD"]
 
 func get_point_id(point: Vector2i) -> int:
 	var bounds = tilemap.get_used_rect()

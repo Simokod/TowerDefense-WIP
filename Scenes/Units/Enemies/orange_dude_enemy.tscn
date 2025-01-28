@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://c64uj6j8p4skj"]
+
+[ext_resource type="PackedScene" uid="uid://bt2ud61f1axpq" path="res://Scenes/Units/Enemies/base_enemy.tscn" id="1_ujwbk"]
+[ext_resource type="Texture2D" uid="uid://dh8663pjyi13m" path="res://Images/Enemies/Enemy_image-removebg-preview.png" id="2_q6hoy"]
+
+[node name="OrangeDudeEnemy" instance=ExtResource("1_ujwbk")]
+unit_name = "OrangeDude"
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_q6hoy")
