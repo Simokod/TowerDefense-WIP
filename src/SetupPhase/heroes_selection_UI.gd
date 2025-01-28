@@ -21,7 +21,7 @@ func _ready():
 	set_mouse_filter(Control.MOUSE_FILTER_IGNORE)
 
 func initialize():
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	tilemap = GameManager.get_tilemap()
 	
 	var available_heroes: Array[BaseHero] = GameManager.get_available_heroes()
 	for hero in available_heroes:

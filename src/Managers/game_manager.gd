@@ -44,7 +44,7 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	# I think this is because both the hovering hero and the placed hero button are textures, 
 	# while the heroes use sprites. This causes the positioning to be different.
 	# TODO: This stills isnt perfect, as once the setup is finished, you see the texture turning to sprite moving a little.
-	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	var tilemap = get_tilemap()
 	hero_instance.position = setup_hero.position + Vector2(tilemap.tile_set.tile_size / 2)
 
 
@@ -85,3 +85,6 @@ func is_debug_mode() -> bool:
 
 func get_debugger() -> Debugger:
 	return debugger if DEBUG_MODE else null
+
+func get_tilemap() -> TileMap:
+	return get_tree().get_root().get_node("Main").get_tilemap()

@@ -9,7 +9,7 @@ var hero: BaseHero = null
 var hero_sprite: TextureRect = null
 
 func setup(seleced_hero: BaseHero, _heroes_selection_ui: HeroesSelectionUI) -> void:
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	tilemap = GameManager.get_tilemap()
 
 	hero = seleced_hero
 	var texture_rect = TextureRect.new()

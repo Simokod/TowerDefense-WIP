@@ -17,7 +17,7 @@ func _ready():
 
 func _init_sprite():
 	var sprite = $Sprite2D
-	var tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	var tilemap = GameManager.get_tilemap()
 	var target_size = tilemap.tile_set.tile_size * 0.9
 	var texture_size = sprite.texture.get_size()
 	

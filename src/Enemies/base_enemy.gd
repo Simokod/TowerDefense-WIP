@@ -15,7 +15,7 @@ var debug_walbkable_cells = []
 func _ready():
 	z_index = Layers.ENEMIES
 
-	tilemap = get_tree().get_root().get_node("Main").get_tilemap()
+	tilemap = GameManager.get_tilemap()
 
 	var sprite = $Sprite2D
 	var target_size = tilemap.tile_set.tile_size * 0.9
