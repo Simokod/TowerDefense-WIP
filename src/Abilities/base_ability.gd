@@ -12,7 +12,7 @@ enum TargetTeam {
 	NONE,
 	FRIENDLY,
 	ENEMY,
-	BOTH
+	ALL
 }
 
 static var targeting_system: TargetingSystem
@@ -28,6 +28,7 @@ var current_cooldown: int = 0
 
 @export var target_type: TargetType = TargetType.NONE
 @export var target_team: TargetTeam = TargetTeam.NONE
+@export var self_target: bool = false
 
 @export var effect_scene: PackedScene # Visual effect when ability is used
 @export var targeting_indicator_scene: PackedScene # Visual for targeting phase

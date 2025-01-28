@@ -78,12 +78,27 @@ func _start_ground_target_mode():
 
 
 func _is_valid_target(target: Node) -> bool:
-	# var target_tile = _get_tile_position(target.global_position)
-	# var hero_tile = _get_tile_position(_current_hero.global_position)
-	
-	# return target_tile.distance_to(hero_tile) <= _current_ability.range
-	return true
+	# TODO: Check if the target is in range
 
+	if _current_ability.self_target and target == _current_hero:
+		print("target is self")
+		return true
+	
+	if ((_current_ability.target_team == Ability.TargetTeam.ENEMY or
+			_current_ability.target_team == Ability.TargetTeam.ALL) and
+			target is BaseEnemy):
+		print("target is enemy")
+		return true
+	
+	if ((_current_ability.target_team == Ability.TargetTeam.FRIENDLY or
+			_current_ability.target_team == Ability.TargetTeam.ALL) and
+			target is BaseHero):
+		print("target is friendly")
+		return true
+	
+	print("target is not valid")
+	return false
+	
 
 func _process(_delta):
 	if not _is_targeting:
