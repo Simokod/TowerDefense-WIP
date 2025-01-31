@@ -1,4 +1,4 @@
-class_name TargetingSystem extends Node
+class_name TargetingSystem extends Node2D
 
 signal targeting_completed(ability, target)
 signal targeting_cancelled(ability)
@@ -21,8 +21,7 @@ func start_targeting(ability: Ability, hero: BaseHero):
 	_current_hero = hero
 	_is_targeting = true
 	
-	# var valid_tiles = _get_tiles_in_range(hero.position, ability.range)
-	# _highlight_valid_tiles(valid_tiles)
+	_highlight_valid_tiles(_current_hero.tile_pos, ability.cast_range)
 	
 	match ability.target_type:
 		Ability.TargetType.NONE:
@@ -33,6 +32,20 @@ func start_targeting(ability: Ability, hero: BaseHero):
 			_start_multi_target_mode()
 		Ability.TargetType.GROUND:
 			_start_ground_target_mode()
+
+
+func _highlight_valid_tiles(hero_pos: Vector2i, ability_range: int):
+	var tiles: Array[Vector2i] = []
+	for q in range(-ability_range, ability_range + 1):
+		for r in range(max(-ability_range, -q - ability_range), min(ability_range, -q + ability_range) + 1):
+			var hex = Vector2i(
+				hero_pos.x + q,
+				hero_pos.y + r + floor((q + (hero_pos.x & 1)) / 2.0)
+			)
+			tiles.append(hex)
+	
+	
+	GameManager.get_debugger().debug_path(tiles, [])
 
 
 func cancel_targeting():
@@ -58,6 +71,7 @@ func _cleanup_targeting():
 	_current_ability = null
 	_current_hero = null
 	_clear_target_highlight()
+	GameManager.get_debugger().clear_debug_paths()
 
 func _start_none_target_mode():
 	complete_targeting(null)
@@ -80,11 +94,11 @@ func _start_ground_target_mode():
 func _calc_hex_distance(from: Vector2i, to: Vector2i) -> int:
 	# Convert from offset coordinates to cube coordinates
 	var from_x = from.x
-	var from_z = from.y - (from.x - (from.x & 1)) / 2
+	var from_z = from.y - floor((from.x - (from.x & 1)) / 2.0)
 	var from_y = -from_x - from_z
 	
 	var to_x = to.x
-	var to_z = to.y - (to.x - (to.x & 1)) / 2
+	var to_z = to.y - floor((to.x - (to.x & 1)) / 2.0)
 	var to_y = -to_x - to_z
 	
 	# Calculate the distance using cube coordinates

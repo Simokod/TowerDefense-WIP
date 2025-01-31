@@ -21,8 +21,8 @@ func setup(ability: Ability, hero: BaseHero):
 	icon = _ability.icon
 	tooltip_text = "%s\n%s" % [_ability.ability_name, _ability.description]
 
-	_ability.targeting_system.targeting_completed.connect(end_targeting)
-	_ability.targeting_system.targeting_cancelled.connect(end_targeting)
+	Ability.targeting_system.targeting_completed.connect(end_targeting)
+	Ability.targeting_system.targeting_cancelled.connect(end_targeting)
 
 func _process(_delta):
 	disabled = not _ability.can_use(_hero)
@@ -37,7 +37,7 @@ func _on_pressed():
 		return
 	
 	if is_targeting:
-		_ability.targeting_system.cancel_targeting()
+		Ability.targeting_system.cancel_targeting()
 		is_targeting = false
 		return
 

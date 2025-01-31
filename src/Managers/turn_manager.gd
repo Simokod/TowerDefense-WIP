@@ -1,5 +1,4 @@
-class_name TurnManager
-extends Node
+class_name TurnManager extends Node2D
 
 signal turn_started(unit: BaseUnit)
 signal turn_ended(unit: BaseUnit)
@@ -61,8 +60,8 @@ func _start_unit_turn(turn_unit: ActiveUnit):
 		await _process_enemy_turn(turn_unit)
 		end_current_turn()
 
+# Let the enemy AI take its turn
 func _process_enemy_turn(turn_unit: ActiveUnit):
-	# Let the enemy AI take its turn
 	await turn_unit.unit.take_turn()
 
 func end_current_turn():
@@ -74,8 +73,8 @@ func end_current_turn():
 	current_unit = null
 	_update_turn_order()
 
+# Calculate and emit the next few expected turns
 func _update_turn_order():
-	# Calculate and emit the next few expected turns
 	var preview_order = []
 	for turn_unit in turn_units:
 		var time_to_turn = (INITIATIVE_MAX - turn_unit.initiative) / turn_unit.unit.initiative
