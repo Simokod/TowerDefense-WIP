@@ -1,7 +1,7 @@
 extends Node
 class_name WaveManager
 
-signal wave_starting(wave_number: int)
+signal wave_started(wave_number: int)
 signal wave_completed(wave_number: int)
 signal all_waves_completed
 
@@ -26,9 +26,10 @@ func start_next_wave() -> void:
 	current_wave_number += 1
 	var wave: WaveConfig = waves[current_wave_number - 1]
 	
-	wave_starting.emit(current_wave_number)
 	await AnnouncementSystem.announce_wave_start(current_wave_number)
 	enemy_manager.start_wave(wave)
+	print("Emitting wave started")
+	wave_started.emit()
 
 
 func _on_all_enemies_defeated() -> void:

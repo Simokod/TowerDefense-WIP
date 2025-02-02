@@ -3,7 +3,7 @@ extends Node2D
 class_name EnemyManager
 
 signal all_enemies_defeated
-signal enemy_spawned_and_moved(enemy: BaseEnemy)
+signal enemy_spawned(enemy: BaseEnemy, spawn_initiative: float)
 
 var active_enemies: Array = []
 
@@ -13,18 +13,15 @@ func _ready():
 
 func start_wave(wave_config: WaveConfig):
 	for group in wave_config.enemy_groups:
-		print("Spawning group {group} of {count}".format({"group": group, "count": wave_config.enemy_groups.size()}))
+		print("Spawning group ", group, " of ", wave_config.enemy_groups.size())
 		for i in range(group.count):
-			print("Spawning enemy {i} of {count}".format({"i": i + 1, "count": group.count}))
+			print("Spawning enemy ", i + 1, " of ", group.count)
 			var enemy_scene: PackedScene = Enemies.ENEMY_SCENES[group.enemy_type]
 			var spawn_tile: Vector2i = GameManager.get_spawn_points()[group.spawn_point_id]
 			var enemy: BaseEnemy = spawn_enemy(enemy_scene, spawn_tile)
 
-			AnnouncementSystem.announce_turn_start(enemy.unit_name)
-			await enemy.take_turn()
-			enemy_spawned_and_moved.emit(enemy)
-
-			await get_tree().create_timer(0.5).timeout
+			enemy_spawned.emit(enemy, TurnManager.INITIATIVE_MAX)
+	print("All enemies spawned")
 
 
 func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
@@ -35,6 +32,7 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
 	add_child(enemy_instance)
 	enemy_instance.set_tile_position(spawn_tile)
+	# enemy_instance.initiative = TurnManager.INITIATIVE_MAX
 	
 	active_enemies.append(enemy_instance)
 	# TODO this should 'kill' the enemy, which in turn will free itself, rather then to have it done here

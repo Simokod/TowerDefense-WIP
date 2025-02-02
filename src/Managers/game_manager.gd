@@ -10,6 +10,8 @@ var debug_layer: CanvasLayer
 var placed_heroes: Array[BaseHero] = []
 var available_heroes: Array[BaseHero] = []
 
+var wave_manager: WaveManager
+
 const HERO_SCENE_PATHS = {
 	"Warrior": preload("res://scenes/Units/Heroes/warrior_hero.tscn"),
 	"Ranger": preload("res://scenes/Units/Heroes/ranger_hero.tscn"),
@@ -43,7 +45,7 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	# TODO: This seems like they only way I could fix the position. 
 	# I think this is because both the hovering hero and the placed hero button are textures, 
 	# while the heroes use sprites. This causes the positioning to be different.
-	# TODO: This stills isnt perfect, as once the setup is finished, you see the texture turning to sprite moving a little.
+	# TODO: This still isnt perfect, as once the setup is finished, you see the texture turning to sprite moving a little.
 	var tilemap = get_tilemap()
 	hero_instance.position = setup_hero.position + Vector2(tilemap.tile_set.tile_size / 2)
 	hero_instance.tile_pos = setup_hero.tile_pos
@@ -61,7 +63,7 @@ func start_gameplay():
 	turn_manager = TurnManager.new(enemy_manager)
 	add_child(turn_manager)
 
-	var wave_manager = WaveManager.new(enemy_manager)
+	wave_manager = WaveManager.new(enemy_manager)
 	add_child(wave_manager)
 
 	var targeting_system = TargetingSystem.new()
@@ -70,10 +72,14 @@ func start_gameplay():
 
 	config_manager = ConfigManager.new()
 	var current_level = config_manager.load_level("demo")
-	await wave_manager.initialize_waves(current_level.waves)
-	
+
+	# SETUPS
+	turn_manager.setup()
+
 	for hero in placed_heroes:
-		turn_manager.register_unit(hero)
+		turn_manager.register_unit(hero, TurnManager.INITIATIVE_BASE)
+
+	await wave_manager.initialize_waves(current_level.waves)
 
 
 func get_spawn_points() -> Array[Vector2i]:
@@ -88,3 +94,6 @@ func get_debugger() -> Debugger:
 
 func get_tilemap() -> TileMap:
 	return get_tree().get_root().get_node("Main").get_tilemap()
+
+func get_wave_manager() -> WaveManager:
+	return wave_manager

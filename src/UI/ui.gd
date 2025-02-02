@@ -6,9 +6,11 @@ var turn_manager: TurnManager
 
 func set_turn_manager(new_turn_manager: TurnManager):
 	turn_manager = new_turn_manager
-	$EndTurnButton.set_turn_manager(turn_manager)
 	turn_manager.turn_started.connect(_on_turn_started)
 	turn_manager.turn_ended.connect(_on_turn_ended)
+	
+	$EndTurnButton.set_turn_manager(turn_manager)
+	$TurnOrderPanel.set_turn_manager(turn_manager)
 
 func _on_turn_started(entity: BaseUnit):
 	var show_controls = entity is BaseHero
@@ -21,6 +23,7 @@ func _on_turn_started(entity: BaseUnit):
 func _on_turn_ended(entity: BaseUnit):
 	$EndTurnButton.hide()
 	$AbilitiesContainer.hide()
+	print("Turn ended for ", entity.unit_name)
 	clear_abilities()
 
 func setup_hero_abilities(hero: BaseHero):

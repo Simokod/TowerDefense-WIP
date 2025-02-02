@@ -1,4 +1,5 @@
 class_name BaseEnemy extends BaseUnit
+
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
 var tilemap: TileMap = null
@@ -11,6 +12,7 @@ var debug_draw_cells = []
 var debug_walbkable_cells = []
 
 func _ready():
+	super._ready()
 	z_index = Layers.ENEMIES
 
 	tilemap = GameManager.get_tilemap()
