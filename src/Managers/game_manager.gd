@@ -55,8 +55,8 @@ func add_placed_hero(setup_hero: SetupPlacedHero) -> void:
 	placed_heroes.append(hero_instance)
 
 
-func start_gameplay():
-	print("GameManager: Starting gameplay")
+func setup_gameplay():
+	print("GameManager: Setup gameplay")
 	var enemy_manager: EnemyManager = EnemyManager.new()
 	add_child(enemy_manager)
 
@@ -71,7 +71,6 @@ func start_gameplay():
 	Ability.targeting_system = targeting_system
 
 	config_manager = ConfigManager.new()
-	var current_level = config_manager.load_level("demo")
 
 	# SETUPS
 	turn_manager.setup()
@@ -79,6 +78,8 @@ func start_gameplay():
 	for hero in placed_heroes:
 		turn_manager.register_unit(hero, TurnManager.INITIATIVE_BASE)
 
+func start_gameplay():
+	var current_level = config_manager.load_level("demo")
 	await wave_manager.initialize_waves(current_level.waves)
 
 

@@ -18,9 +18,9 @@ script = ExtResource("1_jrpq7")
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
-offset_left = 40.0
+offset_left = 156.0
 offset_top = 20.0
-offset_right = -40.0
+offset_right = -156.0
 offset_bottom = 100.0
 script = ExtResource("2_auj6h")
 
@@ -31,7 +31,6 @@ layout_mode = 2
 layout_mode = 2
 text = "Turn order:"
 horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="AbilitiesContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

@@ -50,6 +50,7 @@ func unregister_unit(unit: BaseUnit):
 
 func _on_wave_started():
 	wave_started = true
+	_update_turn_order()
 
 func _process(delta: float):
 	if !wave_started or is_paused or current_unit != null:
@@ -87,18 +88,36 @@ func end_current_turn():
 	current_unit = null
 	_update_turn_order()
 
-# TODO: Currently this shows only the first next turn of each unit. Should also show future turn order.
 func _update_turn_order():
+	print("Updating turn order: ", turn_units)
 	var preview_order: Array[TurnOrderDisplayUnit] = []
+	const TURNS_TO_SHOW = 10
+	
 	for turn_unit in turn_units:
-		var time_to_turn = (INITIATIVE_MAX - turn_unit.initiative) / turn_unit.unit.initiative
+		var current_initiative = turn_unit.initiative
+		var initiative_rate = turn_unit.unit.initiative
+		
+		var time_to_first_turn = (INITIATIVE_MAX - current_initiative) / initiative_rate
 		preview_order.append(TurnOrderDisplayUnit.new(
 			turn_unit.unit,
-			time_to_turn,
+			time_to_first_turn,
 			turn_unit.unit.unit_sprite
+		))
+		
+		for i in range(1, TURNS_TO_SHOW):
+			var time_to_turn = time_to_first_turn + (INITIATIVE_MAX * i) / initiative_rate
+			preview_order.append(TurnOrderDisplayUnit.new(
+				turn_unit.unit,
+				time_to_turn,
+				turn_unit.unit.unit_sprite
 			))
-
+	
 	preview_order.sort_custom(func(a, b): return a.time_to_turn < b.time_to_turn)
+	
+	if preview_order.size() > TURNS_TO_SHOW:
+		preview_order.resize(TURNS_TO_SHOW)
+	
+	print("Updated turn order YYY")
 	turn_order_changed.emit(preview_order)
 
 func pause():

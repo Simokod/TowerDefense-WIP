@@ -36,11 +36,13 @@ func _on_finish_setup_pressed():
 	start_gameplay()
 
 func start_gameplay():
-	await GameManager.start_gameplay()
+	await GameManager.setup_gameplay()
 	
 	var ui = GameplayUIScene.instantiate()
 	$CanvasLayer.add_child(ui)
 	ui.set_turn_manager(GameManager.turn_manager)
+
+	await GameManager.start_gameplay()
 
 func get_tilemap() -> TileMap:
 	return current_level.get_node("LevelTileMap")

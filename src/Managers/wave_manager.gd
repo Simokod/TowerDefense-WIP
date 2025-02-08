@@ -27,8 +27,7 @@ func start_next_wave() -> void:
 	var wave: WaveConfig = waves[current_wave_number - 1]
 	
 	await AnnouncementSystem.announce_wave_start(current_wave_number)
-	enemy_manager.start_wave(wave)
-	print("Emitting wave started")
+	enemy_manager.spawn_wave(wave)
 	wave_started.emit()
 
 

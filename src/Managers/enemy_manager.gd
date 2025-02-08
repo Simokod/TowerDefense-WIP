@@ -11,7 +11,7 @@ func _ready():
 	# Enable Y-sort on the root node
 	y_sort_enabled = true
 
-func start_wave(wave_config: WaveConfig):
+func spawn_wave(wave_config: WaveConfig):
 	for group in wave_config.enemy_groups:
 		print("Spawning group ", group, " of ", wave_config.enemy_groups.size())
 		for i in range(group.count):
