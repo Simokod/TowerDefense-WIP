@@ -27,11 +27,6 @@ script = ExtResource("2_auj6h")
 [node name="HBoxContainer" type="HBoxContainer" parent="TurnOrderPanel"]
 layout_mode = 2
 
-[node name="TurnOrderLabel" type="Label" parent="TurnOrderPanel"]
-layout_mode = 2
-text = "Turn order:"
-horizontal_alignment = 1
-
 [node name="AbilitiesContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1

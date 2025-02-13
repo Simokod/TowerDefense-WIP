@@ -10,9 +10,10 @@ var current_health: int
 var unit_sprite: Texture2D
 var tile_pos: Vector2i
 
+@onready var initiative_progress: TextureProgressBar = $InitiativeProgress
+
 func _ready():
 	current_health = max_health
-	
 	_init_sprite()
 
 

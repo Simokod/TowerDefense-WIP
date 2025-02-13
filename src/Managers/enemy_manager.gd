@@ -32,7 +32,6 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 	var enemy_instance: BaseEnemy = enemy_scene.instantiate()
 	add_child(enemy_instance)
 	enemy_instance.set_tile_position(spawn_tile)
-	# enemy_instance.initiative = TurnManager.INITIATIVE_MAX
 	
 	active_enemies.append(enemy_instance)
 	# TODO this should 'kill' the enemy, which in turn will free itself, rather then to have it done here

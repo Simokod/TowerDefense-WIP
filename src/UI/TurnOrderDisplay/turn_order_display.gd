@@ -8,14 +8,12 @@ func set_turn_manager(new_turn_manager: TurnManager):
 	turn_manager.turn_order_changed.connect(_on_turn_order_changed)
 
 func _on_turn_order_changed(new_order: Array[TurnOrderDisplayUnit]):
-	print("on_turn_order_changed")
 	if not portrait_container:
 		return
 	
 	for child in portrait_container.get_children():
 		child.queue_free()
 		
-	print("XXX: ", new_order)
 	for unit_data in new_order:
 		var portrait = TextureRect.new()
 		portrait.texture = unit_data.portrait

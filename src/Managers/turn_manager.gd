@@ -9,14 +9,14 @@ const INITIATIVE_MAX = 100.0
 
 class ActiveUnit:
 	var unit: BaseUnit
-	var initiative: float = 0.0
+	var initiative_progress: float = 0.0
 	
 	func _init(unit_ref: BaseUnit):
 		unit = unit_ref
 	
 	func accumulate_initiative(delta: float) -> bool:
-		initiative += unit.initiative * delta
-		return initiative >= INITIATIVE_MAX
+		initiative_progress += unit.initiative * delta
+		return initiative_progress >= INITIATIVE_MAX
 
 var enemy_manager: EnemyManager
 
@@ -35,8 +35,11 @@ func setup():
 
 func register_unit(unit: BaseUnit, spawn_initiative: float):
 	var turn_unit = ActiveUnit.new(unit)
-	turn_unit.initiative = spawn_initiative
+	turn_unit.initiative_progress = spawn_initiative
 	turn_units.append(turn_unit)
+	
+	unit.initiative_progress.value = (spawn_initiative / INITIATIVE_MAX) * 100
+
 	_update_turn_order()
 	return turn_unit
 
@@ -60,6 +63,9 @@ func _process(delta: float):
 		if turn_unit.accumulate_initiative(delta):
 			await _start_unit_turn(turn_unit)
 			break
+		
+		# Update the unit's initiative progress display
+		turn_unit.unit.initiative_progress.value = (turn_unit.initiative_progress / INITIATIVE_MAX) * 100
 	
 	# TODO: should update turn accumulator, rather than turn order to keep efficiency
 	# _update_turn_order()
@@ -83,18 +89,17 @@ func end_current_turn():
 	if current_unit == null:
 		return
 
-	current_unit.initiative = 0.0
+	current_unit.initiative_progress = 0.0
 	turn_ended.emit(current_unit.unit)
 	current_unit = null
 	_update_turn_order()
 
 func _update_turn_order():
-	print("Updating turn order: ", turn_units)
 	var preview_order: Array[TurnOrderDisplayUnit] = []
 	const TURNS_TO_SHOW = 10
 	
 	for turn_unit in turn_units:
-		var current_initiative = turn_unit.initiative
+		var current_initiative = turn_unit.initiative_progress
 		var initiative_rate = turn_unit.unit.initiative
 		
 		var time_to_first_turn = (INITIATIVE_MAX - current_initiative) / initiative_rate
@@ -117,7 +122,6 @@ func _update_turn_order():
 	if preview_order.size() > TURNS_TO_SHOW:
 		preview_order.resize(TURNS_TO_SHOW)
 	
-	print("Updated turn order YYY")
 	turn_order_changed.emit(preview_order)
 
 func pause():
