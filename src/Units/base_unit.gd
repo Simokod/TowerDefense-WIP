@@ -5,21 +5,23 @@ class_name BaseUnit extends Node2D
 @export var movement_speed: int = 3
 @export var max_health: int = 100
 @export var allowed_tiles: Array[String]
+@onready var initiative_progress: TextureProgressBar = $InitiativeProgress
 
 var current_health: int
 var unit_sprite: Texture2D
 var tile_pos: Vector2i
+var tilemap: TileMap
 
-@onready var initiative_progress: TextureProgressBar = $InitiativeProgress
 
 func _ready():
 	current_health = max_health
+	tilemap = GameManager.get_tilemap()
 	_init_sprite()
+	_init_progress_bar()
 
 
 func _init_sprite():
 	var sprite = $Sprite2D
-	var tilemap = GameManager.get_tilemap()
 	var target_size = tilemap.tile_set.tile_size * 0.9
 	var texture_size = sprite.texture.get_size()
 	
@@ -33,9 +35,23 @@ func _init_sprite():
 	var sprite_radius = (target_size.x / 2)
 	collision_shape.shape.radius = sprite_radius * 0.9
 
+	
 	unit_sprite = sprite.texture
 	print("Done init sprite for ", unit_name)
+
+func _init_progress_bar():
+	var target_size = tilemap.tile_set.tile_size * 1.1
+	var texture_size = initiative_progress.texture_progress.get_size()
 	
+	var scale_factor = min(
+		target_size.x / texture_size.x,
+		target_size.y / texture_size.y
+	)
+	initiative_progress.scale = Vector2(scale_factor, scale_factor)
+	initiative_progress.position = -(tilemap.tile_set.tile_size * 0.55)
+
+	initiative_progress.modulate.a = 0.9
+
 func take_damage(amount: int):
 	current_health = max(0, current_health - amount)
 	if current_health == 0:

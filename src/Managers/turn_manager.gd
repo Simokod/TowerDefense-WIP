@@ -64,11 +64,8 @@ func _process(delta: float):
 			await _start_unit_turn(turn_unit)
 			break
 		
-		# Update the unit's initiative progress display
-		turn_unit.unit.initiative_progress.value = (turn_unit.initiative_progress / INITIATIVE_MAX) * 100
+		turn_unit.unit.initiative_progress.value = 100 - (turn_unit.initiative_progress / INITIATIVE_MAX) * 100
 	
-	# TODO: should update turn accumulator, rather than turn order to keep efficiency
-	# _update_turn_order()
 
 func _start_unit_turn(turn_unit: ActiveUnit):
 	current_unit = turn_unit

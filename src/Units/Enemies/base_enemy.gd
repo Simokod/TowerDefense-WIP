@@ -2,7 +2,6 @@ class_name BaseEnemy extends BaseUnit
 
 const MOVEMENT_ANIMATION_DURATION = 0.3
 
-var tilemap: TileMap = null
 var astar = AStar2D.new()
 var valid_destination_cells: Array[Vector2i] = []
 
@@ -14,8 +13,6 @@ var debug_walbkable_cells = []
 func _ready():
 	super._ready()
 	z_index = Layers.ENEMIES
-
-	tilemap = GameManager.get_tilemap()
 
 	var sprite = $Sprite2D
 	var target_size = tilemap.tile_set.tile_size * 0.9
