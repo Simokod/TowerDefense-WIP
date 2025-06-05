@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://df3to8sl1h3wr"]
 
 [ext_resource type="PackedScene" uid="uid://cmftd5r01oj8x" path="res://Scenes/Levels/level_base.tscn" id="1_6oe54"]
-[ext_resource type="TileSet" uid="uid://c4x0cr1urx37j" path="res://demo_tile_set.tres" id="2_i31fh"]
+[ext_resource type="TileSet" uid="uid://c4x0cr1urx37j" path="res://Images/demo_tile_set.tres" id="2_i31fh"]
 
 [node name="LevelBase" instance=ExtResource("1_6oe54")]
 
