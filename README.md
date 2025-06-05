@@ -1,24 +1,30 @@
-# Tower Defense Game
+# Tower Defense Game (Work in Progress)
 
-A tower defense game built with Godot 4.3, where players strategically place defensive structures to protect against waves of incoming enemies.
+A tower defense game prototype being developed with Godot 4.3. Currently in early development stages.
 
-## 🎮 About The Game
+### Currently Available:
+- Basic demo level
+- Prototype hero placement system
+- Mock hero characters
+- Basic game infrastructure
 
-TowerDefensePlaceholder is a strategic tower defense game where players must defend their territory by placing towers and managing resources. The game features:
-
-- Strategic tower placement system
-- Multiple enemy types
-- Resource management
+### Planned Features:
+- Multiple hero types
+- Various enemy types and behaviors
+- Resource management system
 - Wave-based gameplay
-- Custom announcement system
-- Mobile-friendly design
+- Complete UI system
+- Multiple levels
+
+## 🎮 About The Project
+
+This is an experimental tower defense game where players will defend their territory by strategically placing heroes. The game is being built with Godot 4.3 with a focus on creating an engaging turn-based tower defense experience.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Godot Engine 4.3 or later
-- Git (for version control)
+- Godot Engine 4.2 or later
 
 ### Installation
 
@@ -32,46 +38,3 @@ git clone https://github.com/YOUR_USERNAME/TowerDefensePlaceholder.git
 4. Navigate to the cloned project folder
 5. Select `project.godot` file
 6. Click "Open"
-
-## 🏗️ Project Structure
-
-- `src/` - Core game scripts and logic
-- `Scenes/` - Game scenes including UI and levels
-- `Images/` - Game artwork and sprites
-- `Resources/` - Game resources and assets
-- `Dev_stuff/` - Development-related files
-
-## 🎯 Game Features
-
-The game includes several key systems:
-- Game Manager for core gameplay logic
-- Tile Occupancy System for tower placement
-- Announcement System for in-game notifications
-- Layer-based rendering system for proper game object ordering
-
-## 🛠️ Built With
-
-- [Godot Engine](https://godotengine.org/) - The game engine used
-- GDScript - Primary scripting language
-
-## 📝 License
-
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## ✨ Acknowledgments
-
-- Godot Engine community
-- Contributors and testers
-
----
-*Note: This is a placeholder name and will be updated with the final game title.*
