@@ -1,3 +1,27 @@
 # Godot 4+ specific ignores
 .godot/
-Dev_stuff/
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# System/tool-specific ignores
+.DS_Store
+Thumbs.db
+.directory
+*~
+*.blend1
+.vscode/
+
+# Temporary files
+*.tmp
+
+# Godot-specific temp files
+*.tmp.*
+
+# Imported files
+*.import
