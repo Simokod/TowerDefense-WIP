@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RangerRangedAttack" load_steps=3 format=3 uid="uid://d1qt0e7ssdxm8"]
+
+[ext_resource type="Texture2D" uid="uid://cgs1g4ekc7fon" path="res://Images/Abilities/Warrior/ranged_attack.png" id="1_kp3m8"]
+[ext_resource type="Script" path="res://src/Abilities/Ranger/ranged_attack.gd" id="2_eg6sa"]
+
+[resource]
+script = ExtResource("2_eg6sa")
+ability_name = "RangerRangedAttack"
+description = "Attacks a single enemy in a range of 5 tiles, dealing 2 damage."
+icon = ExtResource("1_kp3m8")
+cost = 1
+cast_range = 5
+cooldown_duration = 0
+target_type = 1
+target_team = 2
+self_target = false

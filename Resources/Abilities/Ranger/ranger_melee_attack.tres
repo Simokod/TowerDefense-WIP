@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RangerMeleeAttack" load_steps=3 format=3 uid="uid://cwtimj5wnw4w2"]
+
+[ext_resource type="Texture2D" uid="uid://b0owk7183c6d0" path="res://Images/Abilities/Warrior/basic_attack.webp" id="1_cvmp0"]
+[ext_resource type="Script" path="res://src/Abilities/Ranger/melee_attack.gd" id="1_itxw0"]
+
+[resource]
+script = ExtResource("1_itxw0")
+damage = 3
+ability_name = "RangerMeleeAttack"
+description = "Attacks a single enemy, dealing 3 damage."
+icon = ExtResource("1_cvmp0")
+cost = 1
+cast_range = 1
+cooldown_duration = 0
+target_type = 1
+target_team = 2
+self_target = false

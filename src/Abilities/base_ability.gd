@@ -45,7 +45,7 @@ func on_targeting_completed(target, hero: BaseHero):
 
 # Virtual method 
 func execute(_hero: BaseHero, _target = null):
-	pass
+	push_error("execute() must be overridden in subclass")
 
 
 func can_use(_hero: BaseHero) -> bool:
