@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://c0kjrykbg7vva"]
+[gd_scene load_steps=6 format=3 uid="uid://c0kjrykbg7vva"]
 
 [ext_resource type="PackedScene" uid="uid://b80jy72wnhcrf" path="res://Scenes/Units/Heroes/base_hero.tscn" id="1_khfti"]
+[ext_resource type="Script" path="res://src/Abilities/base_ability.gd" id="2_4wvks"]
 [ext_resource type="Texture2D" uid="uid://dqev6osybvrpr" path="res://Images/Heroes/Warrior/Warrior-portrait-removebg-preview.png" id="2_j8krx"]
+[ext_resource type="Resource" uid="uid://b7ar75bn1stm7" path="res://Resources/Abilities/Warrior/warrior_melee_attack.tres" id="3_kxjhn"]
+[ext_resource type="Resource" uid="uid://ccui5j7txq2u3" path="res://Resources/Abilities/Warrior/warrior_ranged_attack.tres" id="4_ds0bf"]
 
 [node name="BaseHero" instance=ExtResource("1_khfti")]
+abilities = Array[ExtResource("2_4wvks")]([ExtResource("3_kxjhn"), ExtResource("4_ds0bf")])
 unit_name = "Warrior"
 initiative = 30.0
 max_health = 120

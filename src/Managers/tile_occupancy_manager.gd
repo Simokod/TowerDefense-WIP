@@ -15,6 +15,7 @@ func register_entity_position(entity, tile_pos: Vector2i):
 	occupied_tiles[tile_pos] = entity
 
 func unregister_entity(entity):
+	print("Tile Occupancy Manager: unregister_entity: ", entity)
 	for pos in occupied_tiles.keys():
 		if occupied_tiles[pos] == entity:
 			occupied_tiles.erase(pos)

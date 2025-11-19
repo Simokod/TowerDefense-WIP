@@ -48,19 +48,27 @@ func _init_progress_bar():
 		target_size.y / texture_size.y
 	)
 	initiative_progress.scale = Vector2(scale_factor, scale_factor)
-	initiative_progress.position = -(tilemap.tile_set.tile_size * 0.55)
+	initiative_progress.position = - (tilemap.tile_set.tile_size * 0.55)
 
 	initiative_progress.modulate.a = 0.9
 
 func take_damage(amount: int):
+	print("Taking damage: ", amount, " to ", unit_name)
 	current_health = max(0, current_health - amount)
+
 	if current_health == 0:
+		print("Unit ", unit_name, " has died")
 		die()
 
 func die():
-  # TODO: Should it be handled here? maybe in the EnemyManager?
 	queue_free()
 
-# Virtual method to be implemented by BaseHero/Enemy
+# Virtual method
 func take_turn():
-	pass
+	push_error("take_turn() must be overridden in subclass")
+
+func get_damage_multiplier() -> float:
+	return 1.0
+
+func get_damage_received_multiplier() -> float:
+	return 1.0

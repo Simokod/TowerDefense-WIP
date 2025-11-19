@@ -1,5 +1,6 @@
 class_name Ability extends Resource
 
+const DamageCalculator = preload("res://src/Combat/damage_calculator.gd")
 
 enum TargetType {
 	NONE,
@@ -44,8 +45,8 @@ func on_targeting_completed(target, hero: BaseHero):
 	execute(hero, target)
 
 # Virtual method 
-func execute(_hero: BaseHero, _target = null):
-	pass
+func execute(_hero: BaseHero, _target: BaseUnit = null):
+	push_error("execute() must be overridden in subclass")
 
 
 func can_use(_hero: BaseHero) -> bool:

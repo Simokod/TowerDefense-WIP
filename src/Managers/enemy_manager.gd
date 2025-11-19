@@ -34,13 +34,20 @@ func spawn_enemy(enemy_scene: PackedScene, spawn_tile: Vector2i) -> BaseEnemy:
 	enemy_instance.set_tile_position(spawn_tile)
 	
 	active_enemies.append(enemy_instance)
-	# TODO this should 'kill' the enemy, which in turn will free itself, rather then to have it done here
-	enemy_instance.tree_exiting.connect(func(): _on_enemy_defeated(enemy_instance))
 	print("spawned enemy", enemy_instance)
+
+	enemy_instance.tree_exiting.connect(func(): _on_enemy_defeated(enemy_instance))
 	return enemy_instance
 
 
 func _on_enemy_defeated(enemy: BaseEnemy) -> void:
-	active_enemies.erase(enemy)
+	print("Enemy manager: Enemy ", enemy.unit_name, " has died")
+	_unregister_enemy(enemy)
 	if active_enemies.is_empty():
 		all_enemies_defeated.emit()
+		print("Enemy manager: All enemies have died")
+
+func _unregister_enemy(enemy: BaseEnemy) -> void:
+	TileOccupancyManager.unregister_entity(enemy)
+	GameManager.turn_manager.unregister_unit(enemy)
+	active_enemies.erase(enemy)

@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqovo0tfsimu4"]
+[gd_scene load_steps=6 format=3 uid="uid://cqovo0tfsimu4"]
 
 [ext_resource type="PackedScene" uid="uid://b80jy72wnhcrf" path="res://Scenes/Units/Heroes/base_hero.tscn" id="1_g8jjw"]
+[ext_resource type="Script" path="res://src/Abilities/base_ability.gd" id="2_48sae"]
 [ext_resource type="Texture2D" uid="uid://wq5w044woml2" path="res://Images/Heroes/Ranger/Ranger_portrait_removed_bg.png" id="2_tdhq8"]
+[ext_resource type="Resource" uid="uid://cwtimj5wnw4w2" path="res://Resources/Abilities/Ranger/ranger_melee_attack.tres" id="3_kk0sn"]
+[ext_resource type="Resource" uid="uid://d1qt0e7ssdxm8" path="res://Resources/Abilities/Ranger/ranger_ranged_attack.tres" id="4_xmrld"]
 
 [node name="BaseHero2" instance=ExtResource("1_g8jjw")]
+abilities = Array[ExtResource("2_48sae")]([ExtResource("3_kk0sn"), ExtResource("4_xmrld")])
 unit_name = "Ranger"
 allowed_tiles = Array[String](["forest"])
 
