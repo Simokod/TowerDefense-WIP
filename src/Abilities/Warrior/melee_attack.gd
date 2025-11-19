@@ -1,8 +1,4 @@
-class_name WarriorMeleeAttack extends Ability
+class_name WarriorMeleeAttack extends DamageAbility
 
-@export var damage: int
-
-func execute(hero: BaseHero, target = null):
-	# TODO: Implement warrior melee attack
-	print("Execute: WarriorMeleeAttack on ", target, " by ", hero.unit_name)
-	pass
+func execute(hero: BaseHero, target: BaseUnit = null):
+	super.execute(hero, target)

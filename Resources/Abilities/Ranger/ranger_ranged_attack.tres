@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("2_eg6sa")
+base_damage = 3
 ability_name = "RangerRangedAttack"
 description = "Attacks a single enemy in a range of 5 tiles, dealing 2 damage."
 icon = ExtResource("1_kp3m8")

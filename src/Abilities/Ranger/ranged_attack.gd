@@ -1,7 +1,4 @@
-class_name RangerRangedAttack extends Ability
+class_name RangerRangedAttack extends DamageAbility
 
-@export var damage: int
-
-func execute(hero: BaseHero, target = null):
-	# TODO: Implement Ranger ranged attack
-	print("Execute: RangerRangedAttack on ", target, " by ", hero.unit_name)
+func execute(hero: BaseHero, target: BaseUnit = null):
+	super.execute(hero, target)

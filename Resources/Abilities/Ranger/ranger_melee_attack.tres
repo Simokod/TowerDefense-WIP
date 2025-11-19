@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_itxw0")
-damage = 3
+base_damage = 2
 ability_name = "RangerMeleeAttack"
 description = "Attacks a single enemy, dealing 3 damage."
 icon = ExtResource("1_cvmp0")

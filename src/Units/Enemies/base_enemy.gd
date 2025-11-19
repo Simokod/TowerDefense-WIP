@@ -170,7 +170,7 @@ func get_hex_neighbors(cell: Vector2i) -> Array[Vector2i]:
 
 
 func find_nearest_target():
-	return Vector2i(23, 7) # Placeholder target
+	return Vector2i(23, 7) # TODO Placeholder target
 
 	
 func take_turn():

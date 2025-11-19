@@ -53,14 +53,22 @@ func _init_progress_bar():
 	initiative_progress.modulate.a = 0.9
 
 func take_damage(amount: int):
+	print("Taking damage: ", amount, " to ", unit_name)
 	current_health = max(0, current_health - amount)
+
 	if current_health == 0:
+		print("Unit ", unit_name, " has died")
 		die()
 
 func die():
-  # TODO: Should it be handled here? maybe in the EnemyManager?
 	queue_free()
 
 # Virtual method
 func take_turn():
 	push_error("take_turn() must be overridden in subclass")
+
+func get_damage_multiplier() -> float:
+	return 1.0
+
+func get_damage_received_multiplier() -> float:
+	return 1.0

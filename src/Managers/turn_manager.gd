@@ -28,6 +28,7 @@ var wave_started: bool = false
 func _init(_enemy_manager: EnemyManager):
 	enemy_manager = _enemy_manager
 	enemy_manager.enemy_spawned.connect(register_unit)
+	
 
 func setup():
 	GameManager.get_wave_manager().wave_started.connect(_on_wave_started)
@@ -45,6 +46,7 @@ func register_unit(unit: BaseUnit, spawn_initiative: float):
 
 
 func unregister_unit(unit: BaseUnit):
+	print("Turn Manager: unregister_unit:", unit)
 	for i in turn_units.size():
 		if turn_units[i].unit == unit:
 			turn_units.remove_at(i)
