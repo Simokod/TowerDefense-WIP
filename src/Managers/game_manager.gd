@@ -93,7 +93,7 @@ func is_debug_mode() -> bool:
 func get_debugger() -> Debugger:
 	return debugger if DEBUG_MODE else null
 
-func get_tilemap() -> TileMap:
+func get_tilemap() -> TileMapLayer:
 	return get_tree().get_root().get_node("Main").get_tilemap()
 
 func get_wave_manager() -> WaveManager:

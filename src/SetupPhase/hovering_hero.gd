@@ -2,7 +2,7 @@ extends Control
 
 class_name HoveringHero
 
-var tilemap: TileMap = null
+var tilemap: TileMapLayer = null
 var heroes_selection_ui: HeroesSelectionUI
 
 var hero: BaseHero = null

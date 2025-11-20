@@ -1,7 +1,5 @@
 class_name Ability extends Resource
 
-const DamageCalculator = preload("res://src/Combat/damage_calculator.gd")
-
 enum TargetType {
 	NONE,
 	SINGLE,
