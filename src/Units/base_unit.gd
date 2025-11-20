@@ -6,6 +6,7 @@ class_name BaseUnit extends Node2D
 @export var max_health: int = 100
 @export var allowed_tiles: Array[String]
 @onready var initiative_progress: TextureProgressBar = $InitiativeProgress
+@onready var health_bar: HealthBarUI = $HealthBar
 
 var current_health: int
 var unit_sprite: Texture2D
@@ -18,6 +19,8 @@ func _ready():
 	tilemap = GameManager.get_tilemap()
 	_init_sprite()
 	_init_progress_bar()
+	if health_bar:
+		health_bar.setup(tilemap.tile_set.tile_size, max_health, current_health)
 
 
 func _init_sprite():
@@ -39,6 +42,7 @@ func _init_sprite():
 	unit_sprite = sprite.texture
 	print("Done init sprite for ", unit_name)
 
+
 func _init_progress_bar():
 	var target_size = tilemap.tile_set.tile_size * 1.1
 	var texture_size = initiative_progress.texture_progress.get_size()
@@ -52,23 +56,33 @@ func _init_progress_bar():
 
 	initiative_progress.modulate.a = 0.9
 
+
 func take_damage(amount: int):
 	print("Taking damage: ", amount, " to ", unit_name)
 	current_health = max(0, current_health - amount)
+	
+	if health_bar:
+		health_bar.update_health(current_health, max_health)
 
 	if current_health == 0:
 		print("Unit ", unit_name, " has died")
 		die()
 
+
 func die():
+	if health_bar:
+		health_bar.hide_health()
 	queue_free()
+
 
 # Virtual method
 func take_turn():
 	push_error("take_turn() must be overridden in subclass")
 
+
 func get_damage_multiplier() -> float:
 	return 1.0
+
 
 func get_damage_received_multiplier() -> float:
 	return 1.0
