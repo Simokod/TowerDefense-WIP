@@ -44,5 +44,5 @@ func start_gameplay():
 
 	await GameManager.start_gameplay()
 
-func get_tilemap() -> TileMap:
+func get_tilemap() -> TileMapLayer:
 	return current_level.get_node("LevelTileMap")

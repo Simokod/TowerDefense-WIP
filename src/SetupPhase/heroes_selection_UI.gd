@@ -7,7 +7,7 @@ const HoveringHeroResource = preload("res://src/SetupPhase/hovering_hero.gd")
 @onready var hero_buttons_container: VBoxContainer = $HeroSelectionContainer
 @onready var canvas_layer = get_parent()
 
-var tilemap: TileMap = null
+var tilemap: TileMapLayer = null
 var hero_locations: Dictionary = {}
 var object_locations: Dictionary = {}
 
@@ -136,7 +136,7 @@ func is_valid_hero_placement_position(selected_hero: BaseHero, tile_pos: Vector2
 	return is_allowed_tile and is_empty_tile
 
 func _is_allowed_tile(hero: BaseHero, tile_pos: Vector2i) -> bool:
-	var chosen_tile = tilemap.get_cell_tile_data(0, tile_pos)
+	var chosen_tile = tilemap.get_cell_tile_data(tile_pos)
 	if not chosen_tile: return false
 
 	var chosen_tile_type = chosen_tile.get_custom_data("tile_type")

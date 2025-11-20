@@ -10,7 +10,7 @@ class_name BaseUnit extends Node2D
 var current_health: int
 var unit_sprite: Texture2D
 var tile_pos: Vector2i
-var tilemap: TileMap
+var tilemap: TileMapLayer
 
 
 func _ready():

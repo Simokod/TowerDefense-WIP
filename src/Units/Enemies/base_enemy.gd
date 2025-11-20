@@ -41,12 +41,12 @@ func calculate_path() -> Array:
 	astar.clear()
 	valid_destination_cells.clear()
 	
-	var cells: Array[Vector2i] = tilemap.get_used_cells(0)
+	var cells: Array[Vector2i] = tilemap.get_used_cells()
 	var walkable_cells: Array[Vector2i] = []
 	
 	# Find all walkable cells
 	for cell in cells:
-		var tile_data = tilemap.get_cell_tile_data(0, cell)
+		var tile_data = tilemap.get_cell_tile_data(cell)
 		if is_walkable_tile(tile_data):
 			astar.add_point(get_point_id(cell), Vector2(cell.x, cell.y))
 			walkable_cells.append(cell)
@@ -58,7 +58,7 @@ func calculate_path() -> Array:
 	# Connect ALL neighboring walkable tiles
 	for cell in walkable_cells:
 		for neighbor in get_hex_neighbors(cell):
-			var neighbor_tile_data = tilemap.get_cell_tile_data(0, neighbor)
+			var neighbor_tile_data = tilemap.get_cell_tile_data(neighbor)
 			# Check if it's a road, but don't check if it's occupied
 			if neighbor_tile_data and is_walkable_tile(neighbor_tile_data):
 				var cell_id = get_point_id(cell)

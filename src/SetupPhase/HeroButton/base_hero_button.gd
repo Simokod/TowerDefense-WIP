@@ -4,7 +4,7 @@ var heroes_selection_ui: HeroesSelectionUI
 var hero: BaseHero
 var is_selected: bool = false
 
-func setup(_hero: BaseHero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMap) -> void:
+func setup(_hero: BaseHero, _heroes_selection_ui: HeroesSelectionUI, _tilemap: TileMapLayer) -> void:
 	hero = _hero
 	heroes_selection_ui = _heroes_selection_ui
 
